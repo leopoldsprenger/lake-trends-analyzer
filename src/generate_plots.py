@@ -18,6 +18,15 @@ VARIABLE_GRAPH_COLORS = {
     'lakelevel': 'blue',
 }
 
+def calculate_trend(data, variable):
+    numeric_dates = mdates.date2num(data['date'])
+    variable_values = data[variable]
+
+    polynomial_coefficients = np.polyfit(numeric_dates, variable_values, 1)
+    trend_line_function = np.poly1d(polynomial_coefficients)
+
+    return trend_line_function
+
 def plot_trend(data, variables, path, marker_threshold=50, max_labels=15):
     for variable in variables:
         plt.figure(figsize=(10, 6))
@@ -29,10 +38,7 @@ def plot_trend(data, variables, path, marker_threshold=50, max_labels=15):
         plt.plot(data['date'], data[variable], marker=marker_style, label=label, color=color)
 
         numeric_dates = mdates.date2num(data['date'])
-        variable_values = data[variable]
-
-        polynomial_coefficients = np.polyfit(numeric_dates, variable_values, 1)
-        trend_line_function = np.poly1d(polynomial_coefficients)
+        trend_line_function = calculate_trend(data, variable)
         plt.plot(data['date'], trend_line_function(numeric_dates), linestyle='--', color='gray', label=f'{label} Trend')
 
         plt.xlabel('Date')
