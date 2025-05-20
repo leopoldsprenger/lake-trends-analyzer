@@ -1,5 +1,6 @@
 import argparse
 import pandas as pd
+import generate_plots
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Lake Trend Analyzer')
@@ -21,7 +22,10 @@ def main():
     print(f"Output variables: {variables}")
 
     data = load_data(filepath)
+    data.columns = [col.lower() for col in data.columns]
     print(data.head())
+
+    generate_plots.plot_trend(data, variables)
 
 if __name__ == '__main__':
     main()

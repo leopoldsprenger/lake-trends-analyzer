@@ -65,8 +65,8 @@ python src/main.py --file data/mock_dataset_10.csv --var temperature
 ## 🧭 Roadmap (Python Phase)
 
 - [x] Set up basic project structure
-- [ ] Implement CSV parsing
-- [ ] Develop basic time series plotting
+- [x] Implement CSV parsing
+- [x] Develop basic time series plotting
 - [ ] Add a trend line to the graphs
 - [ ] Export static images of graphs
 - [ ] Add linear forecasting prototype
