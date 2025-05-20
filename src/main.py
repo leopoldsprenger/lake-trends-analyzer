@@ -1,4 +1,5 @@
 import argparse
+import pandas as pd
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Lake Trend Analyzer')
@@ -8,6 +9,9 @@ def parse_arguments():
 
     return parser.parse_args()
 
+def load_data(filepath):
+    return pd.read_csv(filepath)
+
 def main():
     arguments = parse_arguments()
     filepath = arguments.input
@@ -15,6 +19,9 @@ def main():
 
     print(f"Input file: {filepath}")
     print(f"Output variables: {variables}")
+
+    data = load_data(filepath)
+    print(data.head())
 
 if __name__ == '__main__':
     main()
