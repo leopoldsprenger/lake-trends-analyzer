@@ -67,9 +67,9 @@ python src/main.py --file data/mock_dataset_10.csv --var temperature
 - [x] Set up basic project structure
 - [x] Implement CSV parsing
 - [x] Develop basic time series plotting
-- [ ] Add a trend line to the graphs
-- [ ] Export static images of graphs
-- [ ] Add linear forecasting prototype
+- [x] Add a trend line to the graphs
+- [x] Export static images of graphs
+- [x] Add linear forecasting prototype
 - [ ] Implement correlation graphing for multiple variables
 
 ---

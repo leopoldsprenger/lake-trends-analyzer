@@ -18,7 +18,7 @@ def load_data(filepath):
 def forecast_future_lake_level(data):
     data['date'] = pd.to_datetime(data['date'])
 
-    trend_line_function = generate_plots.calculate_trend(data, 'lakelevel')
+    trend_line_function = generate_plots.calculate_trend(data, 'date', 'lakelevel')
     last_date = data['date'].max()
 
     years = [1, 10, 50, 100]
@@ -40,7 +40,7 @@ def forecast_future_lake_level(data):
         if days_until_dry > 0:
             years_until_dry = days_until_dry / days_in_year
             dry_date = mdates.num2date(zero_day).date()
-            print(f"Warning: Lake is projected to dry out in {int(days_until_dry)} days "
+            print(f"\nWarning: Lake is projected to dry out in {int(days_until_dry)} days "
                     f"({years_until_dry:.2f} years), around {dry_date}.")
         else:
             print("\nWarning: Trend suggests lake would already be dry based on current data.")
@@ -50,6 +50,7 @@ def forecast_future_lake_level(data):
 
 def main():
     trend_folder_path = 'graphs/trends/'
+    correlation_folder_path = 'graphs/correlations/'
 
     arguments = parse_arguments()
     filepath = arguments.input
@@ -67,7 +68,11 @@ def main():
     print(f"Output variables: {variables}\n")
 
     forecast_future_lake_level(data)
-    generate_plots.plot_trend(data, variables, trend_folder_path)
+    for variable in variables:
+        generate_plots.plot_trend(data, variable, trend_folder_path)
+
+        if variable != 'lakelevel':
+            generate_plots.plot_correlation(data, variable, correlation_folder_path)
 
 if __name__ == '__main__':
     main()
