@@ -49,8 +49,8 @@ def forecast_future_lake_level(data):
     print("The forecast is subject to uncertainty and may not reflect actual future conditions.")
 
 def main():
-    trend_folder_path = 'graphs/trends/'
-    correlation_folder_path = 'graphs/correlations/'
+    trend_folder_path = 'output/timeseries_graphs/'
+    correlation_folder_path = 'output/correlation_graphs/'
 
     arguments = parse_arguments()
     filepath = arguments.input
@@ -73,6 +73,7 @@ def main():
 
         if variable != 'lakelevel':
             generate_plots.plot_correlation(data, variable, correlation_folder_path)
+    generate_plots.plot_seasonal_correlation(data, correlation_folder_path)
 
 if __name__ == '__main__':
     main()

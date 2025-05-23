@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import calendar
 
 VARIABLE_LABELS = {
     'temperature': 'Temperature (°C)',
@@ -84,3 +85,26 @@ def plot_correlation(data, variable, path, max_labels=15):
     plt.tight_layout()
 
     plt.savefig(path + f'{variable}.png', dpi=300)
+
+def plot_seasonal_correlation(data, path, max_labels=12):
+    plt.figure(figsize=(10, 6))
+
+    data['month'] = data['date'].dt.month
+    monthly_means = data.groupby('month')['lakelevel'].mean().reset_index()
+
+    plt.plot(monthly_means['month'], monthly_means['lakelevel'], marker='o', color='gold', label=VARIABLE_LABELS['lakelevel'])
+
+    step = max(1, len(monthly_means) // max_labels)
+    xticks = monthly_means['month'][::step]
+
+    plt.xticks(monthly_means['month'], monthly_means['month'].apply(lambda x: calendar.month_name[x]), rotation=45)
+
+    plt.xlabel('Month')
+    plt.ylabel(VARIABLE_LABELS['lakelevel'])
+    plt.title(f"Seasonal Correlation of {VARIABLE_LABELS['lakelevel']}")
+
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+
+    plt.savefig(path + 'seasonal.png', dpi=300)
