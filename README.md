@@ -1,79 +1,105 @@
 # Lake Trends Analyzer
 
-**Lake Trends Analyzer** is a modular Python scaffold being developed to support early-stage analysis of lake-related environmental data as part of the **TOTCUS** global water and climate research initiative.
+**Lake Trends Analyzer** is a fast and modular Python app designed to extract insight from environmental data collected as part of the global **TOTCUS** water and climate research initiative.
 
-This project is currently in the **design and prototyping phase**, focusing on defining structure, expected input formats, and planned capabilities. While implementation is in progress, the repository contains code stubs, placeholder scripts, and dataset samples for testing purposes.
+Given a CSV of time-series measurements (lake level, temperature, humidity, precipitation, etc.), it automatically generates trend plots, correlation graphs, and lake level forecasts — enabling both exploratory analysis and actionable conclusions.
 
 ---
 
 ## 🌍 Project Context
 
-This tool is part of our school’s involvement in **TOTCUS**, an international program studying the impact of environmental change on aquatic ecosystems. Our local contributions involve collecting weather and lake condition data from a nearby lake.
+This project supports our school’s participation in **TOTCUS**, a research initiative focusing on the effects of environmental factors on our aquatic ecosystems, from oceans to lakes and rivers. Our measurements come from a nearby lake and surrounding weather conditions.
 
-The Python version aims to explore concepts like trend detection, data visualization, and long-term lake level forecasting using common data science libraries.
-
----
-
-## 🧰 Planned Features
-
-> ✨ *Note: Features below are design targets. Implementation is ongoing.*
-
-- 📊 **Graphing Capabilities**
-  - Time series plots for each environmental variable
-  - Correlation scatterplots between lake level and other variables
-  - Trendlines for both time and correlation plots
-
-- 🔮 **Forecasting Support**
-  - Simple lake level projection using linear regression or exponential smoothing
-  - Warning system if levels show signs of drying out
-
-- 🧱 **Flexible CSV Input Handling**
-  - Auto-detect known columns like `temperature`, `lakelevel`, etc.
-  - Skip unknown or malformed data gracefully
-
-- 🧪 **Mock Data for Testing**
-  - Sample CSVs in `data/` folder for testing graph generation and preprocessing logic
-
+**Lake Trends Analyzer** transforms raw measurements into visual insight, helping identify patterns, correlations, and potential long-term risks like lake desiccation.
 
 ---
 
-## ⚙️ Setup Instructions
+## 🚀 Features
 
-Install dependencies (planned or in use):
+- 📈 **Automatic Graph Generation**
+  - Time series plots for each variable with trendlines (seasonal graph feature included)
+  - Correlation scatterplots (e.g. lake level vs. temperature), also with trendlines
+
+- 🧠 **Forecasting & Warnings**
+  - Predicts lake level for 1, 10, 50, and 100 years
+  - Warns if the trend suggests drying out in a finite number of days
+
+- 🗂 **Modular CSV Parsing**
+  - New variables can be added without modifying the code structure
+
+- 🎯 **Custom Output Control**
+  - Use the `--variables` flag to limit output to specific variables or generate all at once
+
+- ⚡ **Fast Python Backend**
+  - Written entirely in Python with Matplotlib for plotting, ensuring compatibility and ease of use
+
+---
+
+## ⚙️ Prerequisites
+
+- Python 3.8 or higher
+- Required packages: pandas, numpy, matplotlib, scikit-learn (see `requirements.txt`)
+
+For a compatible CSV structure, see [data/mock_dataset_10.csv](data/mock_dataset_10.csv).
+
+## 🛠️ How to Run
 
 ```bash
-pip install requirements.txt
+python src/main.py path/to/your.csv [--variables temperature humidity lakelevel]
 ```
 
-Run the script:
+Examples:
+
+- Generate all graphs:
+```bash
+python src/main.py data/mock_dataset_365.csv
+```
+
+- Only analyze temperature and humidity:
+```bash
+python src/main.py data/mock_dataset_365.csv --variables temperature humidity
+```
+
+Supported variables include: `temperature`, `humidity`, `precipitation`, `windspeed`, and `lakelevel`.
+
+## 🧪 Example Output
+
+All graphs are auto-saved in the `output/` directory:
 
 ```bash
-python src/main.py --file data/mock_dataset_10.csv --var temperature
+output/
+├── timeseries_graphs/
+│   ├── temperature.png
+│   ├── humidity.png
+│   └── …
+└── correlation_graphs/
+    ├── temperature.png
+    ├── humidity.png
+    └── …
 ```
 
+### 📈 Example Output of the Temperature Graphs
+
+<p align="center">
+  <img src="output/timeseries_graphs/temperature.png" alt="Temperature Time Series" width="48%" />
+  <img src="output/correlation_graphs/temperature.png" alt="Lake Level vs Temperature" width="48%" />
+</p>
+
+Mock datasets for experimentation are provided in the `data/` folder.
+
 ---
 
-## 📉 Example Outputs (Concept)
+## 🧭 Roadmap
 
-> **Note:** These are goals for future output. Sample graphs may be generated manually during testing.
+Planned improvements include:
 
-- `graphs/timeseries/temperature.png` — Temperature trends over time
-- `graphs/correlations/lakelevel_vs_temperature.png` — Correlation graph
-
----
-
-## 🧭 Roadmap (Python Phase)
-
-- [x] Set up basic project structure
-- [x] Implement CSV parsing
-- [x] Develop basic time series plotting
-- [x] Add a trend line to the graphs
-- [x] Export static images of graphs
-- [x] Add linear forecasting prototype
-- [ ] Implement correlation graphing for multiple variables
+- ✅ Unit tests (currently in development) for reliability and correctness
+- 📬 Automated email reports to project coordinators
+- 🖥️ Simple Web UI or enhanced CLI-based data entry (under consideration)
 
 ---
 
 ## 🤝 Contributions
 
-This Project is part of our school's exploratory phase with the **TOTCUS** initiative. All feedback is welcome as we move toward a more robust, high-performance version of this tool.
+This project was developed independently as part of a student contribution to the TOTCUS research effort. Collaboration and suggestions are welcome.
+All rights reserved.
