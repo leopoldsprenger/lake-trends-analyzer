@@ -2,7 +2,7 @@ import argparse
 import numpy as np
 import pandas as pd
 import matplotlib.dates as mdates
-import generate_plots
+import core.generate_plots as generate_plots
 import difflib
 
 def parse_arguments() -> argparse.Namespace:

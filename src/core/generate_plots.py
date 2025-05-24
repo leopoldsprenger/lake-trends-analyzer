@@ -161,9 +161,6 @@ def plot_seasonal_correlation(
 
     plt.plot(monthly_means['month'], monthly_means['lakelevel'], marker='o', color='gold', label=VARIABLE_LABELS['lakelevel'])
 
-    step = max(1, len(monthly_means) // max_labels)
-    xticks = monthly_means['month'][::step]
-
     # Use month names for x-tick labels
     plt.xticks(monthly_means['month'], monthly_means['month'].apply(lambda x: calendar.month_name[x]), rotation=45)
 
