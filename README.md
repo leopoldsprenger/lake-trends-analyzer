@@ -38,9 +38,9 @@ This project supports our school’s participation in **TOTCUS**, a research ini
 ## ⚙️ Prerequisites
 
 - Python 3.8 or higher
-- Required packages: pandas, numpy, matplotlib, scikit-learn (see `requirements.txt`)
+- Required packages: see `requirements.txt`
 
-For a compatible CSV structure, see [data/mock_dataset_10.csv](data/mock_dataset_10.csv).
+For a compatible CSV structure, see [data/2020s/data_from_2024.csv](data/2020s/data_from_2024.csv.csv).
 
 ## 🛠️ How to Run
 
@@ -52,12 +52,12 @@ Examples:
 
 - Generate all graphs:
 ```bash
-python src/main.py data/mock_dataset_365.csv
+python src/main.py data/data_since_1970.csv
 ```
 
 - Only analyze temperature and humidity:
 ```bash
-python src/main.py data/mock_dataset_365.csv --variables temperature humidity
+python src/main.py data/data_since_1970.csv --variables temperature humidity
 ```
 
 Supported variables include: `temperature`, `humidity`, `precipitation`, `windspeed`, and `lakelevel`.
@@ -85,7 +85,7 @@ output/
   <img src="output/correlation_graphs/temperature.png" alt="Lake Level vs Temperature" width="48%" />
 </p>
 
-Mock datasets for experimentation are provided in the `data/` folder.
+Datasets are provided in the `data/` folder.
 
 ---
 
