@@ -52,7 +52,8 @@ def plot_trend(
     variable: str,
     path: str,
     marker_threshold: int = 50,
-    max_labels: int = 15
+    max_labels: int = 15,
+    use_years: bool = False
 ) -> None:
     """
     Plot the time series and trend line for a given variable.
@@ -83,9 +84,23 @@ def plot_trend(
     plt.ylabel(label)
     plt.title(f"{label} over time")
 
-    step = max(1, len(data) // max_labels)
-    xticks = data['date'][::step]  # Reduce number of x-ticks for readability
-    plt.xticks(xticks, rotation=45)
+    if use_years:
+        # Use years only for x labels, but limit to max_labels
+        years = pd.to_datetime(data['date']).dt.year
+        unique_years = np.sort(years.unique())
+        step = max(1, len(unique_years) // max_labels)
+        selected_years = unique_years[::step]
+        xticks = [data['date'][years[years == y].index[0]] for y in selected_years]
+        plt.xticks(
+            xticks,
+            [str(y) for y in selected_years],
+            rotation=45
+        )
+    else:
+        # Use normal dates with max label rule
+        step = max(1, len(data) // max_labels)
+        xticks = data['date'][::step]
+        plt.xticks(xticks, rotation=45)
 
     plt.grid(True)
     plt.legend()
@@ -115,10 +130,11 @@ def plot_correlation(
 
     label = VARIABLE_LABELS[variable]
     color = VARIABLE_GRAPH_COLORS[variable]
+    alpha = 0.25 if len(data) > 1000 else 1.0  # Adjust alpha for large datasets
     data = data[data[variable] != 0]  # Remove zero values for better correlation
     variable_values = data[variable]
 
-    plt.scatter(variable_values, data['lakelevel'], marker='.', color=color, label=label)
+    plt.scatter(variable_values, data['lakelevel'], marker='.', color=color, label=label, alpha=alpha)
 
     min_value = data[variable].min()
     max_value = data[variable].max()

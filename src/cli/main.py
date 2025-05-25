@@ -137,11 +137,48 @@ def main() -> None:
 
     forecast_future_lake_level(data)
 
+    # Convert 'date' to datetime if not already
+    if not np.issubdtype(data['date'].dtype, np.datetime64):
+        data['date'] = pd.to_datetime(data['date'])
+
+    use_months = len(data) > 1000
+    use_years = len(data) > 3000
+
     for variable in variables:
-        generate_plots.plot_trend(data, variable, trend_folder_path)
+        if variable == 'lakelevel':
+            plot_data = data
+        else:
+            if use_years:
+                # Resample to yearly averages for non-lakelevel variables
+                yearly = data.set_index('date').resample('YE')
+                plot_data = yearly[variable].mean().reset_index()
+                if 'lakelevel' in data.columns and variable != 'lakelevel':
+                    plot_data['lakelevel'] = yearly['lakelevel'].mean().values
+
+                # Filter out incomplete years
+                # Count number of records per year, keep only years with at least 365 days (account for leap years)
+                year_counts = data.set_index('date').resample('YE').size().reset_index(name='count')
+                # Assume daily data: at least 365 days per year (could be 366 for leap years)
+                complete_years = year_counts[year_counts['count'] >= 365]['date']
+                plot_data = plot_data[plot_data['date'].isin(complete_years)].reset_index(drop=True)
+
+            elif use_months:
+                # Resample to monthly averages for non-lakelevel variables
+                plot_data = data.set_index('date').resample('ME')[variable].mean().reset_index()
+                if 'lakelevel' in data.columns and variable != 'lakelevel':
+                    plot_data['lakelevel'] = data.set_index('date')['lakelevel'].resample('M').mean().values
+            else:
+                plot_data = data
+
+        generate_plots.plot_trend(plot_data, variable, trend_folder_path, use_years=use_years)
 
         if variable != 'lakelevel':
-            generate_plots.plot_correlation(data, variable, correlation_folder_path)
+            if use_months:
+                # Correlation with months
+                monthly_data = data.set_index('date').resample('ME').mean().reset_index()
+                generate_plots.plot_correlation(monthly_data, variable, correlation_folder_path)
+            else:
+                generate_plots.plot_correlation(data, variable, correlation_folder_path)
     
     generate_plots.plot_seasonal_correlation(data, correlation_folder_path)
 
