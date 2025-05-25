@@ -156,6 +156,10 @@ def plot_seasonal_correlation(
     """
     plt.figure(figsize=(10, 6))
 
+    # Ensure 'date' column is datetime
+    if not np.issubdtype(data['date'].dtype, np.datetime64):
+        data['date'] = pd.to_datetime(data['date'], errors='coerce')
+
     data['month'] = data['date'].dt.month  # Extract month from date
     monthly_means = data.groupby('month')['lakelevel'].mean().reset_index()  # Mean lake level per month
 
