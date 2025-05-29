@@ -69,20 +69,20 @@ All graphs are auto-saved in the `output/` directory:
 ```bash
 output/
 ├── timeseries_graphs/
-│   ├── temperature.png
-│   ├── humidity.png
+│   ├── temperature_timeseries.png
+│   ├── humidity_timeseries.png
 │   └── …
 └── correlation_graphs/
-    ├── temperature.png
-    ├── humidity.png
+    ├── temperature_correlation.png
+    ├── humidity_correlation.png
     └── …
 ```
 
 ### 📈 Example Output of the Temperature Graphs
 
 <p align="center">
-  <img src="output/timeseries_graphs/temperature.png" alt="Temperature Time Series" width="48%" />
-  <img src="output/correlation_graphs/temperature.png" alt="Lake Level vs Temperature" width="48%" />
+  <img src="output/timeseries_graphs/temperature_timeseries.png" alt="Temperature Time Series" width="48%" />
+  <img src="output/correlation_graphs/temperature_correlation.png" alt="Lake Level vs Temperature" width="48%" />
 </p>
 
 Datasets are provided in the `data/` folder.
