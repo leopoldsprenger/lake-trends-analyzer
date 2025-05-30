@@ -9,7 +9,7 @@ from pathlib import Path
 core_path = Path(__file__).resolve().parent.parent / "core"
 sys.path.append(str(core_path))
 
-from core import generate_plots
+import generate_plots
 
 def parse_arguments() -> argparse.Namespace:
     """

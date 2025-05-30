@@ -20,6 +20,12 @@ VARIABLE_GRAPH_COLORS = {
     'lakelevel': 'blue',
 }
 
+def get_variable_label(variable: str) -> str:
+    return VARIABLE_LABELS.get(variable, variable.capitalize())
+
+def get_variable_color(variable: str) -> str:
+    return VARIABLE_GRAPH_COLORS.get(variable, 'black')  # Default to black if not found
+
 def calculate_trend(
     data: pd.DataFrame,
     x_variable: str,
@@ -70,9 +76,9 @@ def plot_trend(
     """
     plt.figure(figsize=(10, 6))
 
-    label = VARIABLE_LABELS[variable]
+    label = get_variable_label(variable)
     marker_style = '.' if len(data) <= marker_threshold else None  # Use markers for small datasets
-    color = VARIABLE_GRAPH_COLORS[variable]
+    color = get_variable_color(variable)
 
     plt.plot(data['date'], data[variable], marker=marker_style, label=label, color=color)
 
@@ -128,13 +134,16 @@ def plot_correlation(
     """
     plt.figure(figsize=(10, 6))
 
-    label = VARIABLE_LABELS[variable]
-    color = VARIABLE_GRAPH_COLORS[variable]
+    variable_label = get_variable_label(variable)
+    lake_level_label = get_variable_label('lakelevel')
+    color = get_variable_color(variable)
+    if variable not in data.columns:
+        raise ValueError(f"Variable '{variable}' not found in the data.")
     alpha = 0.25 if len(data) > 1000 else 1.0  # Adjust alpha for large datasets
     data = data[data[variable] != 0]  # Remove zero values for better correlation
     variable_values = data[variable]
 
-    plt.scatter(variable_values, data['lakelevel'], marker='.', color=color, label=VARIABLE_LABELS['lakelevel'], alpha=alpha)
+    plt.scatter(variable_values, data['lakelevel'], marker='.', color=color, label=lake_level_label, alpha=alpha)
 
     min_value = data[variable].min()
     max_value = data[variable].max()
@@ -142,11 +151,11 @@ def plot_correlation(
     plt.xticks(xticks, [f"{x:.2f}" for x in xticks])
 
     trend_line_function = calculate_trend(data, variable, 'lakelevel')
-    plt.plot(xticks, trend_line_function(xticks), linestyle='--', color='gray', label=f'{VARIABLE_LABELS['lakelevel']} Trend')
+    plt.plot(xticks, trend_line_function(xticks), linestyle='--', color='gray', label=f'{lake_level_label} Trend')
 
-    plt.xlabel(label)
-    plt.ylabel(VARIABLE_LABELS['lakelevel'])
-    plt.title(f"{VARIABLE_LABELS['lakelevel']} vs {label}")
+    plt.xlabel(variable_label)
+    plt.ylabel(lake_level_label)
+    plt.title(f"{lake_level_label} vs {variable_label}")
 
     plt.grid(True)
     plt.legend()
@@ -156,8 +165,7 @@ def plot_correlation(
 
 def plot_seasonal_correlation(
     data: pd.DataFrame,
-    path: str,
-    max_labels: int = 12
+    path: str
 ) -> None:
     """
     Plot the seasonal (monthly) average of lake level.
@@ -165,11 +173,12 @@ def plot_seasonal_correlation(
     Args:
         data (pd.DataFrame): DataFrame containing the data.
         path (str): Output directory for the plot.
-        max_labels (int): Max number of x-axis labels.
 
     Returns:
         None
     """
+    lake_level_label = get_variable_label('lakelevel')
+
     plt.figure(figsize=(10, 6))
 
     # Ensure 'date' column is datetime
@@ -179,14 +188,14 @@ def plot_seasonal_correlation(
     data['month'] = data['date'].dt.month  # Extract month from date
     monthly_means = data.groupby('month')['lakelevel'].mean().reset_index()  # Mean lake level per month
 
-    plt.plot(monthly_means['month'], monthly_means['lakelevel'], marker='o', color='gold', label=VARIABLE_LABELS['lakelevel'])
+    plt.plot(monthly_means['month'], monthly_means['lakelevel'], marker='o', color='gold', label=lake_level_label)
 
     # Use month names for x-tick labels
     plt.xticks(monthly_means['month'], monthly_means['month'].apply(lambda x: calendar.month_name[x]), rotation=45)
 
     plt.xlabel('Month')
-    plt.ylabel(VARIABLE_LABELS['lakelevel'])
-    plt.title(f"Seasonal Correlation of {VARIABLE_LABELS['lakelevel']}")
+    plt.ylabel(lake_level_label)
+    plt.title(f"Seasonal Correlation of {lake_level_label}")
 
     plt.grid(True)
     plt.legend()
