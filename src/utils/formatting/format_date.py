@@ -25,6 +25,6 @@ def reformat_dates(input_path, output_path):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python reformat_csv.py input.csv output.csv")
+        print("Usage: python format_date.py input.csv output.csv")
     else:
         reformat_dates(sys.argv[1], sys.argv[2])

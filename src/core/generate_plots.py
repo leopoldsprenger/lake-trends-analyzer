@@ -10,6 +10,7 @@ VARIABLE_LABELS = {
     'precipitation': 'Precipitation (mm)',
     'windspeed': 'Wind Speed (km/h)',
     'lakelevel': 'Lake Level (m)',
+    'groundwater': 'Groundwater Level (m a.s.l.)',
 }
 
 VARIABLE_GRAPH_COLORS = {
@@ -18,6 +19,7 @@ VARIABLE_GRAPH_COLORS = {
     'precipitation': 'green',
     'windspeed': 'orange',
     'lakelevel': 'blue',
+    'groundwater': 'brown',
 }
 
 def get_variable_label(variable: str) -> str:

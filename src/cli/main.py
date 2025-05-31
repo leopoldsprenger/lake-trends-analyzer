@@ -27,7 +27,7 @@ def parse_arguments() -> argparse.Namespace:
 
 def load_data(filepath: str) -> pd.DataFrame:
     """
-    Load CSV data from the given file path.
+    Load CSV data from the given file path, cleaning stray commas and empty values.
 
     Args:
         filepath (str): Path to the CSV file.
@@ -35,7 +35,14 @@ def load_data(filepath: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Loaded data as a pandas DataFrame.
     """
-    return pd.read_csv(filepath)
+    df = pd.read_csv(filepath, dtype=str)
+    df = df.map(lambda x: x.strip().replace(',', '') if isinstance(x, str) else x)
+    df = df.replace('', np.nan)
+    # Try to convert columns to numeric where possible (except 'date')
+    for col in df.columns:
+        if col.lower() != 'date':
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+    return df
 
 def forecast_future_lake_level(data: pd.DataFrame) -> None:
     """
@@ -124,6 +131,15 @@ def main() -> None:
     data = load_data(filepath)
     data.columns = [col.lower() for col in data.columns]  # Standardize column names to lowercase
 
+    # Remove rows with NaN in 'date'
+    data = data.dropna(subset=['date'])
+
+    # Convert 'date' to datetime if not already
+    if not np.issubdtype(data['date'].dtype, np.datetime64):
+        data['date'] = pd.to_datetime(data['date'], errors='coerce')
+    # Remove rows with NaT in 'date' after conversion
+    data = data.dropna(subset=['date'])
+
     if arguments.variables is not None:
         variables = arguments.variables
         # Check for invalid variables and suggest closest matches
@@ -137,50 +153,61 @@ def main() -> None:
 
     forecast_future_lake_level(data)
 
-    # Convert 'date' to datetime if not already
-    if not np.issubdtype(data['date'].dtype, np.datetime64):
-        data['date'] = pd.to_datetime(data['date'])
-
     use_months = len(data) > 1000
     use_years = len(data) > 3000
 
     for variable in variables:
+        # Remove rows with NaN for the variable (and lakelevel if needed) before plotting
         if variable == 'lakelevel':
-            plot_data = data
+            plot_data = data.dropna(subset=['date', 'lakelevel'])
         else:
             if use_years:
-                # Resample to yearly averages for non-lakelevel variables
                 yearly = data.set_index('date').resample('YE')
                 plot_data = yearly[variable].mean().reset_index()
                 if 'lakelevel' in data.columns and variable != 'lakelevel':
                     plot_data['lakelevel'] = yearly['lakelevel'].mean().values
-
-                # Filter out incomplete years
-                # Count number of records per year, keep only years with at least 365 days (account for leap years)
                 year_counts = data.set_index('date').resample('YE').size().reset_index(name='count')
-                # Assume daily data: at least 365 days per year (could be 366 for leap years)
                 complete_years = year_counts[year_counts['count'] >= 365]['date']
                 plot_data = plot_data[plot_data['date'].isin(complete_years)].reset_index(drop=True)
-
             elif use_months:
-                # Resample to monthly averages for non-lakelevel variables
                 plot_data = data.set_index('date').resample('ME')[variable].mean().reset_index()
                 if 'lakelevel' in data.columns and variable != 'lakelevel':
                     plot_data['lakelevel'] = data.set_index('date')['lakelevel'].resample('M').mean().values
             else:
                 plot_data = data
+            # Remove rows with NaN for variable and lakelevel if present
+            subset_cols = ['date', variable]
+            if 'lakelevel' in plot_data.columns:
+                subset_cols.append('lakelevel')
+            plot_data = plot_data.dropna(subset=subset_cols)
+
+        if plot_data.empty:
+            print(f"Skipping plot for '{variable}' due to insufficient data.")
+            continue
 
         generate_plots.plot_trend(plot_data, variable, trend_folder_path, use_years=use_years)
 
         if variable != 'lakelevel':
             if use_months:
-                # Correlation with months
                 monthly_data = data.set_index('date').resample('ME').mean().reset_index()
-                generate_plots.plot_correlation(monthly_data, variable, correlation_folder_path)
+                monthly_data = monthly_data.dropna(subset=[variable, 'lakelevel'])
+                if not monthly_data.empty:
+                    generate_plots.plot_correlation(monthly_data, variable, correlation_folder_path)
+                else:
+                    print(f"Skipping correlation plot for '{variable}' due to insufficient data.")
             else:
-                generate_plots.plot_correlation(data, variable, correlation_folder_path)
-    
-    generate_plots.plot_seasonal_correlation(data, correlation_folder_path)
+                corr_data = data.dropna(subset=[variable, 'lakelevel'])
+                if not corr_data.empty:
+                    generate_plots.plot_correlation(corr_data, variable, correlation_folder_path)
+                else:
+                    print(f"Skipping correlation plot for '{variable}' due to insufficient data.")
+
+    # For seasonal correlation, drop missing values
+    seasonal_data = data.dropna(subset=['date', 'lakelevel'])
+    if not seasonal_data.empty:
+        generate_plots.plot_seasonal_correlation(seasonal_data, correlation_folder_path)
+    else:
+        print("Skipping seasonal correlation plot due to insufficient data.")
 
     print(f"\nGraphs saved to {trend_folder_path} and {correlation_folder_path}")
 
