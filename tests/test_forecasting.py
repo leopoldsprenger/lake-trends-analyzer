@@ -5,7 +5,7 @@ import io
 import sys
 import re
 
-from src.cli import main as cli_main
+from src.app import cli as cli_main
 
 class TestForecastFutureLakeLevelOutput(unittest.TestCase):
     def setUp(self):

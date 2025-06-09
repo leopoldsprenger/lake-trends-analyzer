@@ -50,7 +50,7 @@ class ImageLabel(QLabel):
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Lake Trend Analyzer")
+        self.setWindowTitle("Lake Trends Analyzer")
         self.resize(1100, 700)
         self.csv_path = DEFAULT_CSV
         self.param = None

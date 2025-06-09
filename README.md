@@ -1,6 +1,6 @@
 # Lake Trends Analyzer
 
-**Lake Trends Analyzer** is a fast and modular Python app designed to extract insight from environmental data collected as part of the global **TOTCUS** water and climate research initiative.
+**Lake Trends Analyzer** is a fast, modular Python app with both a graphical user interface (GUI) and command-line interface (CLI) for extracting insights from environmental data collected as part of the global **TOTCUS** water and climate research initiative.
 
 Given a CSV of time-series measurements (lake level, temperature, humidity, precipitation, etc.), it automatically generates trend plots, correlation graphs, and lake level forecasts — enabling both exploratory analysis and actionable conclusions.
 
@@ -16,6 +16,14 @@ This project supports our school’s participation in **TOTCUS**, a research ini
 
 ## 🚀 Features
 
+- 🖥️ **Graphical User Interface (GUI)**
+  - Intuitive, fully featured GUI for data selection, analysis, and visualization
+  - Easily select variables, view plots, and export results
+
+- 💻 **Command-Line Interface (CLI)**
+  - Scriptable CLI for automation and advanced users
+  - Supports variable selection and batch processing
+
 - 📈 **Automatic Graph Generation**
   - Time series plots for each variable with trendlines (seasonal graph feature included)
   - Correlation scatterplots (e.g. lake level vs. temperature), also with trendlines
@@ -28,10 +36,14 @@ This project supports our school’s participation in **TOTCUS**, a research ini
   - New variables can be added without modifying the code structure
 
 - 🎯 **Custom Output Control**
-  - Use the `--variables` flag to limit output to specific variables or generate all at once
+  - Select variables to analyze via GUI or CLI
 
 - ⚡ **Fast Python Backend**
   - Written entirely in Python with Matplotlib for plotting, ensuring compatibility and ease of use
+
+## 🎥 Demo
+
+![GUI Usage Demo](./gui_demo.gif)
 
 ---
 
@@ -42,25 +54,39 @@ This project supports our school’s participation in **TOTCUS**, a research ini
 
 For a compatible CSV structure, see [data/2020s/data_from_2024.csv](data/2020s/data_from_2024.csv.csv).
 
+---
+
 ## 🛠️ How to Run
 
+### Using the GUI
+
 ```bash
-python src/main.py path/to/your.csv [--variables temperature humidity lakelevel]
+python src/app/gui.py
+```
+
+- Launches the graphical interface for interactive analysis.
+
+### Using the CLI
+
+```bash
+python src/app/cli.py path/to/your.csv [--variables temperature humidity lakelevel]
 ```
 
 Examples:
 
 - Generate all graphs:
-```bash
-python src/main.py data/data_since_1970.csv
-```
+  ```bash
+  python src/app/cli.py data/data_since_1970.csv
+  ```
 
 - Only analyze temperature and humidity:
-```bash
-python src/main.py data/data_since_1970.csv --variables temperature humidity
-```
+  ```bash
+  python src/app/cli.py data/data_since_1970.csv --variables temperature humidity
+  ```
 
-Supported variables include: `temperature`, `humidity`, `precipitation`, `windspeed`, and `lakelevel`.
+Supported variables include: `temperature`, `humidity`, `precipitation`, `windspeed`, `groundwater`,  and `lakelevel`.
+
+---
 
 ## 🧪 Example Output
 
@@ -93,13 +119,13 @@ Datasets are provided in the `data/` folder.
 
 Planned improvements include:
 
-- ✅ Unit tests (currently in development) for reliability and correctness
 - 📬 Automated email reports to project coordinators
+- 🌐 Further enhancements to analysis and prediction tools
 - 🖥️ Simple Web UI or enhanced CLI-based data entry (under consideration)
 
 ---
 
 ## 🤝 Contributions
 
-This project was developed independently as part of a student contribution to the TOTCUS research effort. Collaboration and suggestions are welcome.
+This project was developed independently as part of a student contribution to the TOTCUS research effort. Collaboration and suggestions are welcome.  
 All rights reserved.

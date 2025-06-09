@@ -190,7 +190,7 @@ def plot_seasonal_correlation(
     data['month'] = data['date'].dt.month  # Extract month from date
     monthly_means = data.groupby('month')['lakelevel'].mean().reset_index()  # Mean lake level per month
 
-    plt.plot(monthly_means['month'], monthly_means['lakelevel'], marker='o', color='gold', label=lake_level_label)
+    plt.plot(monthly_means['month'], monthly_means['lakelevel'], marker='o', color=VARIABLE_GRAPH_COLORS['lakelevel'], label=lake_level_label)
 
     # Use month names for x-tick labels
     plt.xticks(monthly_means['month'], monthly_means['month'].apply(lambda x: calendar.month_name[x]), rotation=45)
