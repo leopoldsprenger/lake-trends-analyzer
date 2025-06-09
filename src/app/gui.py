@@ -88,14 +88,22 @@ class MainWindow(QWidget):
         sidebar = QWidget()
         sidebar_layout = QVBoxLayout(sidebar)
 
-        # CSV File selection
-        self.csv_label = QLabel(f"Source CSV:\n{self.csv_path}")
+        # CSV File selection dropdown
+        self.csv_dropdown = QComboBox()
+        self.csv_dropdown.addItems([
+            "Physical Data (data/physical_data.csv)",
+            "Chemical Data (data/chemical_data.csv)",
+            "Other (Choose file...)"
+        ])
+        self.csv_dropdown.currentIndexChanged.connect(self.csv_dropdown_changed)
+        sidebar_layout.addWidget(QLabel("Source CSV:"))
+        sidebar_layout.addWidget(self.csv_dropdown)
+
+        self.csv_label = QLabel(f"{self.csv_path}")
         self.csv_label.setWordWrap(True)
         self.csv_label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         self.csv_label.setMaximumWidth(260)
-
-        self.csv_btn = QPushButton("Select CSV")
-        self.csv_btn.clicked.connect(self.select_csv)
+        sidebar_layout.addWidget(self.csv_label)
 
         # Parameter dropdown
         self.param_dropdown = QComboBox()
@@ -110,8 +118,6 @@ class MainWindow(QWidget):
         self.view_plots_btn = QPushButton("View Plot")
         self.view_plots_btn.clicked.connect(self.update_plot)
 
-        sidebar_layout.addWidget(self.csv_label)
-        sidebar_layout.addWidget(self.csv_btn)
         sidebar_layout.addWidget(QLabel("Parameter:"))
         sidebar_layout.addWidget(self.param_dropdown)
         sidebar_layout.addWidget(QLabel("Plot Type:"))
@@ -150,6 +156,29 @@ class MainWindow(QWidget):
         splitter.addWidget(self.right_panel)
         splitter.setSizes([300, 800])
         main_layout.addWidget(splitter)
+
+    def csv_dropdown_changed(self, idx):
+        if idx == 0:
+            self.csv_path = "data/physical_data.csv"
+            self.csv_label.setText(self.csv_path)
+            self.load_csv_headers()
+        elif idx == 1:
+            self.csv_path = "data/chemical_data.csv"
+            self.csv_label.setText(self.csv_path)
+            self.load_csv_headers()
+        elif idx == 2:
+            path, _ = QFileDialog.getOpenFileName(self, "Select CSV", "", "CSV Files (*.csv)")
+            if path:
+                self.csv_path = path
+                self.csv_label.setText(self.csv_path)
+                self.load_csv_headers()
+            else:
+                # If user cancels, revert to previous selection
+                self.csv_dropdown.blockSignals(True)
+                # Set to previous index (default to 0 if unknown)
+                prev_idx = 0 if self.csv_path == "data/physical_data.csv" else 1 if self.csv_path == "data/chemical_data.csv" else 2
+                self.csv_dropdown.setCurrentIndex(prev_idx)
+                self.csv_dropdown.blockSignals(False)
 
     def select_csv(self):
         path, _ = QFileDialog.getOpenFileName(self, "Select CSV", "", "CSV Files (*.csv)")
