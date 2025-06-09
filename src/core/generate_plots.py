@@ -4,29 +4,45 @@ import matplotlib.dates as mdates
 import calendar
 import pandas as pd
 
-VARIABLE_LABELS = {
-    'temperature': 'Temperature (°C)',
-    'humidity': 'Humidity (%)',
-    'precipitation': 'Precipitation (mm)',
-    'windspeed': 'Wind Speed (km/h)',
-    'lakelevel': 'Lake Level (m)',
-    'groundwater': 'Groundwater Level (m a.s.l.)',
-}
+def load_variable_dict_from_file(file_path: str) -> dict:
+    """
+    Load a variable dictionary from a txt file.
+    Each line should be in the format: key: value
+    """
+    variable_dict = {}
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line or ':' not in line:
+                    continue
+                key, value = line.split(':', 1)
+                key = key.strip()
+                value = value.strip()
+                if not key or not value:
+                    raise ValueError(f"Invalid line in {file_path}: '{line}'")
+                variable_dict[key] = value
+    except Exception as e:
+        raise RuntimeError(f"Error loading variable dictionary from {file_path}: {e}")
+    return variable_dict
 
-VARIABLE_GRAPH_COLORS = {
-    'temperature': 'red',
-    'humidity': 'purple',
-    'precipitation': 'green',
-    'windspeed': 'orange',
-    'lakelevel': 'blue',
-    'groundwater': 'brown',
-}
+def load_variable_labels(file_path: str) -> dict:
+    """
+    Load variable labels from a txt file.
+    """
+    return load_variable_dict_from_file(file_path)
+
+def load_variable_graph_colors(file_path: str) -> dict:
+    """
+    Load variable graph colors from a txt file.
+    """
+    return load_variable_dict_from_file(file_path)
 
 def get_variable_label(variable: str) -> str:
-    return VARIABLE_LABELS.get(variable, variable.capitalize())
+    return load_variable_labels('assets/variable_labels.txt').get(variable, variable.capitalize())
 
 def get_variable_color(variable: str) -> str:
-    return VARIABLE_GRAPH_COLORS.get(variable, 'black')  # Default to black if not found
+    return load_variable_graph_colors('assets/variable_graph_colors.txt').get(variable, 'black')  # Default to black if not found
 
 def calculate_trend(
     data: pd.DataFrame,
@@ -65,6 +81,7 @@ def plot_trend(
 ) -> None:
     """
     Plot the time series and trend line for a given variable.
+    Note: The 'lakelevel' column is always sourced from data/lakelevel_data.csv.
 
     Args:
         data (pd.DataFrame): DataFrame containing the data.
@@ -115,6 +132,7 @@ def plot_trend(
     plt.tight_layout()
 
     plt.savefig(path + f'{variable}_timeseries.png', dpi=300)
+    plt.close()
 
 def plot_correlation(
     data: pd.DataFrame,
@@ -124,6 +142,7 @@ def plot_correlation(
 ) -> None:
     """
     Plot the correlation between a variable and lake level.
+    Note: The 'lakelevel' column is always sourced from data/lakelevel_data.csv.
 
     Args:
         data (pd.DataFrame): DataFrame containing the data.
@@ -164,6 +183,7 @@ def plot_correlation(
     plt.tight_layout()
 
     plt.savefig(path + f'{variable}_correlation.png', dpi=300)
+    plt.close()
 
 def plot_seasonal_correlation(
     data: pd.DataFrame,
@@ -171,6 +191,7 @@ def plot_seasonal_correlation(
 ) -> None:
     """
     Plot the seasonal (monthly) average of lake level.
+    Note: The 'lakelevel' column is always sourced from data/lakelevel_data.csv.
 
     Args:
         data (pd.DataFrame): DataFrame containing the data.
@@ -190,7 +211,7 @@ def plot_seasonal_correlation(
     data['month'] = data['date'].dt.month  # Extract month from date
     monthly_means = data.groupby('month')['lakelevel'].mean().reset_index()  # Mean lake level per month
 
-    plt.plot(monthly_means['month'], monthly_means['lakelevel'], marker='o', color=VARIABLE_GRAPH_COLORS['lakelevel'], label=lake_level_label)
+    plt.plot(monthly_means['month'], monthly_means['lakelevel'], marker='o', color=get_variable_color('lakelevel'), label=lake_level_label)
 
     # Use month names for x-tick labels
     plt.xticks(monthly_means['month'], monthly_means['month'].apply(lambda x: calendar.month_name[x]), rotation=45)
@@ -204,3 +225,4 @@ def plot_seasonal_correlation(
     plt.tight_layout()
 
     plt.savefig(path + 'seasonal_correlation.png', dpi=300)
+    plt.close()

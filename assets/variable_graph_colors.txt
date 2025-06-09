@@ -1,0 +1,27 @@
+temperature: red
+humidity: purple
+precipitation: green
+windspeed: orange
+lakelevel: blue
+groundwater: brown
+ammonium-n dissolved: red
+calcium: orange
+chloride: purple
+chlorophyll a: green
+doc: red
+total-n: brown
+potassium: gold
+conductivity: orange
+magnesium: blue
+sodium: gold
+nitrate-n: red
+phaephytin: green
+redox potential: red
+oxygen content: blue
+oxygen saturation: red
+silicon dioxide-si: black
+sulfate: gold
+acid capacity (alkalinity): green
+total phosphorus: red
+ortho-phosphate-p: purple
+ph: green

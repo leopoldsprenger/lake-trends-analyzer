@@ -3,14 +3,14 @@ import os
 import subprocess
 import pandas as pd
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt, QSize, QThread, pyqtSignal, QTimer
 
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
     QFileDialog, QComboBox, QListWidget, QTextEdit, QSplitter, QSizePolicy
 )
 
-DEFAULT_CSV = "data/data_since_1970.csv"
+DEFAULT_CSV = "data/physical_data.csv"
 TIMESERIES_DIR = "output/timeseries_graphs"
 CORRELATION_DIR = "output/correlation_graphs"
 OUTPUT_DIR = "output"
@@ -47,6 +47,26 @@ class ImageLabel(QLabel):
         else:
             self.clear()
 
+class GenerateGraphsThread(QThread):
+    finished_signal = pyqtSignal()
+
+    def __init__(self, csv_path):
+        super().__init__()
+        self.csv_path = csv_path
+
+    def run(self):
+        try:
+            subprocess.run(
+                [
+                    sys.executable, "src/app/cli.py",
+                    self.csv_path
+                ],
+                check=True
+            )
+        except Exception:
+            pass
+        self.finished_signal.emit()
+
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -70,6 +90,10 @@ class MainWindow(QWidget):
 
         # CSV File selection
         self.csv_label = QLabel(f"Source CSV:\n{self.csv_path}")
+        self.csv_label.setWordWrap(True)
+        self.csv_label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        self.csv_label.setMaximumWidth(260)
+
         self.csv_btn = QPushButton("Select CSV")
         self.csv_btn.clicked.connect(self.select_csv)
 
@@ -138,10 +162,15 @@ class MainWindow(QWidget):
         try:
             df = pd.read_csv(self.csv_path, nrows=1)
             headers = [h for h in df.columns if h.lower() != "date"]
+            headers = [h.lower() for h in headers]
+            # Ensure 'lakelevel' is first in the list
+            if "lakelevel" in headers:
+                headers.remove("lakelevel")
+            headers.insert(0, "lakelevel")
             self.param_dropdown.clear()
-            self.param_dropdown.addItems([h.lower() for h in headers])
+            self.param_dropdown.addItems(headers)
             if headers:
-                self.param = headers[0].lower()
+                self.param = headers[0]
                 self.update_plot_type_options()
         except Exception as e:
             self.param_dropdown.clear()
@@ -226,17 +255,20 @@ class MainWindow(QWidget):
         self.output_files_dropdown.addItems(files)
 
     def generate_graphs(self):
-        try:
-            subprocess.run(
-                [
-                    sys.executable, "src/app/cli.py",
-                    self.csv_path
-                ],
-                check=True
-            )
-            self.load_output_files()
-        except Exception as e:
-            pass  # Optionally show error
+        self.generate_graphs_btn.setEnabled(False)
+        self.generate_graphs_btn.setText("Generating...")
+        self.thread = GenerateGraphsThread(self.csv_path)
+        self.thread.finished_signal.connect(self.on_generation_complete)
+        self.thread.start()
+
+    def on_generation_complete(self):
+        self.load_output_files()
+        self.generate_graphs_btn.setText("Generation Complete")
+        QTimer.singleShot(3000, self.reset_generate_button)
+
+    def reset_generate_button(self):
+        self.generate_graphs_btn.setEnabled(True)
+        self.generate_graphs_btn.setText("Generate Graphs")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

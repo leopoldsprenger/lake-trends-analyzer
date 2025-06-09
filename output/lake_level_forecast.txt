@@ -1,11 +1,11 @@
 Forecast based on recent trend after major trajectory change detection:
 
-Forecast for 1 years (2026-05-23): 18.68 m
-Forecast for 10 years (2035-05-23): 17.97 m
-Forecast for 50 years (2075-05-23): 14.85 m
-Forecast for 100 years (2125-05-24): 10.96 m
+Forecast for 1 years (2025-12-31): 18.64 m
+Forecast for 10 years (2034-12-31): 17.81 m
+Forecast for 50 years (2074-12-31): 14.12 m
+Forecast for 100 years (2125-01-01): 9.51 m
 
-Warning: Lake is projected to dry out in 87841 days (240.50 years), around 2265-11-22.
+Warning: Lake is projected to dry out in 74152 days (203.02 years), around 2228-01-09.
 
 This forecast is based on the most recent trend segment after detecting major changes.
 The forecast is subject to uncertainty and may not reflect actual future conditions.
