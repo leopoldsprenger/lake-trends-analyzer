@@ -25,3 +25,4 @@ acid capacity (alkalinity): green
 total phosphorus: red
 ortho-phosphate-p: purple
 ph: green
+secchi depth: green

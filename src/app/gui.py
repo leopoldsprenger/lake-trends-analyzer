@@ -91,8 +91,8 @@ class MainWindow(QWidget):
         # CSV File selection dropdown
         self.csv_dropdown = QComboBox()
         self.csv_dropdown.addItems([
-            "Physical Data (data/physical_data.csv)",
             "Chemical Data (data/chemical_data.csv)",
+            "Physical Data (data/physical_data.csv)",
             "Other (Choose file...)"
         ])
         self.csv_dropdown.currentIndexChanged.connect(self.csv_dropdown_changed)
@@ -195,6 +195,7 @@ class MainWindow(QWidget):
             # Ensure 'lakelevel' is first in the list
             if "lakelevel" in headers:
                 headers.remove("lakelevel")
+            headers.sort()
             headers.insert(0, "lakelevel")
             self.param_dropdown.clear()
             self.param_dropdown.addItems(headers)
@@ -280,6 +281,7 @@ class MainWindow(QWidget):
             f for f in os.listdir(OUTPUT_DIR)
             if os.path.isfile(os.path.join(OUTPUT_DIR, f)) and not f.startswith('.')
         ]
+        files.sort(key=str.lower)
         self.output_files_dropdown.clear()
         self.output_files_dropdown.addItems(files)
 
