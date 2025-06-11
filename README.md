@@ -69,22 +69,22 @@ python src/app/gui.py
 ### Using the CLI
 
 ```bash
-python src/app/cli.py path/to/your.csv [--variables temperature humidity lakelevel]
+python src/app/cli.py path/to/your.csv [--variables temperature humidity lakelevel] [--y_variable_source path/to/csv/of/y-variable] [--y_variable 'y variable for correlations']
 ```
 
 Examples:
 
-- Generate all graphs:
+- Generate all physical graphs (correlation plots showing how 'lakelevel' changes with parameters):
   ```bash
-  python src/app/cli.py data/data_since_1970.csv
+  python src/app/cli.py data/physical_data.csv --y_variable_source data/lakelevel_data.csv --y_variable lakelevel
   ```
 
-- Only analyze temperature and humidity:
+- Only analyze temperature and humidity (correlation plots showing how 'chlorophyll a' changes with parameters):
   ```bash
-  python src/app/cli.py data/data_since_1970.csv --variables temperature humidity
+  python src/app/cli.py data/physical_data.csv --variables temperature humidity --y_variable_source data/chemical_data.csv --y_variable 'chlorophyll a'
   ```
 
-Supported variables include: `temperature`, `humidity`, `precipitation`, `windspeed`, `groundwater`,  and `lakelevel`.
+The supported variables depend on the headers of the respective csv sources.
 
 ---
 
@@ -99,16 +99,17 @@ output/
 │   ├── humidity_timeseries.png
 │   └── …
 └── correlation_graphs/
-    ├── temperature_correlation.png
-    ├── humidity_correlation.png
+    ├── lakelevel/
+        ├── temperature_correlation.png
+        ├── humidity_correlation.png
     └── …
 ```
 
-### 📈 Example Output of the Temperature Graphs
+### 📈 Example Output of the Temperature Graphs with Lake Level Correlation
 
 <p align="center">
   <img src="output/timeseries_graphs/temperature_timeseries.png" alt="Temperature Time Series" width="48%" />
-  <img src="output/correlation_graphs/temperature_correlation.png" alt="Lake Level vs Temperature" width="48%" />
+  <img src="output/correlation_graphs/lakelevel/temperature_correlation.png" alt="Lake Level vs Temperature" width="48%" />
 </p>
 
 Datasets are provided in the `data/` folder.

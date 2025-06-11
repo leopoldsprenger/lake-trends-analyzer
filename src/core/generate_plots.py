@@ -71,7 +71,7 @@ def calculate_trend(
 
     return trend_line_function
 
-def plot_trend(
+def plot_timeseries(
     data: pd.DataFrame,
     variable: str,
     path: str,
@@ -136,7 +136,8 @@ def plot_trend(
 
 def plot_correlation(
     data: pd.DataFrame,
-    variable: str,
+    x_variable: str,
+    y_variable: str,
     path: str,
     max_labels: int = 15
 ) -> None:
@@ -155,38 +156,39 @@ def plot_correlation(
     """
     plt.figure(figsize=(10, 6))
 
-    variable_label = get_variable_label(variable)
-    lake_level_label = get_variable_label('lakelevel')
-    color = get_variable_color(variable)
-    if variable not in data.columns:
-        raise ValueError(f"Variable '{variable}' not found in the data.")
+    x_variable_label = get_variable_label(x_variable)
+    y_variable_label = get_variable_label(y_variable)
+    color = get_variable_color(x_variable)
+    if x_variable not in data.columns:
+        raise ValueError(f"Variable '{x_variable}' not found in the data.")
     alpha = 0.25 if len(data) > 1000 else 1.0  # Adjust alpha for large datasets
-    data = data[data[variable] != 0]  # Remove zero values for better correlation
-    variable_values = data[variable]
+    data = data[data[x_variable] != 0]  # Remove zero values for better correlation
+    variable_values = data[x_variable]
 
-    plt.scatter(variable_values, data['lakelevel'], marker='.', color=color, label=lake_level_label, alpha=alpha)
+    plt.scatter(variable_values, data[y_variable], marker='.', color=color, label=y_variable_label, alpha=alpha)
 
-    min_value = data[variable].min()
-    max_value = data[variable].max()
+    min_value = data[x_variable].min()
+    max_value = data[x_variable].max()
     xticks = np.linspace(min_value, max_value, num=max_labels)
     plt.xticks(xticks, [f"{x:.2f}" for x in xticks])
 
-    trend_line_function = calculate_trend(data, variable, 'lakelevel')
-    plt.plot(xticks, trend_line_function(xticks), linestyle='--', color='gray', label=f'{lake_level_label} Trend')
+    trend_line_function = calculate_trend(data, x_variable, y_variable)
+    plt.plot(xticks, trend_line_function(xticks), linestyle='--', color='gray', label=f'{y_variable_label} Trend')
 
-    plt.xlabel(variable_label)
-    plt.ylabel(lake_level_label)
-    plt.title(f"{lake_level_label} vs {variable_label}")
+    plt.xlabel(x_variable_label)
+    plt.ylabel(y_variable_label)
+    plt.title(f"{y_variable_label} vs {x_variable_label}")
 
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
 
-    plt.savefig(path + f'{variable}_correlation.png', dpi=300)
+    plt.savefig(path + f'{x_variable}_correlation.png', dpi=300)
     plt.close()
 
 def plot_seasonal_correlation(
     data: pd.DataFrame,
+    variable: str,
     path: str
 ) -> None:
     """
@@ -200,7 +202,7 @@ def plot_seasonal_correlation(
     Returns:
         None
     """
-    lake_level_label = get_variable_label('lakelevel')
+    label = get_variable_label(variable)
 
     plt.figure(figsize=(10, 6))
 
@@ -209,20 +211,20 @@ def plot_seasonal_correlation(
         data['date'] = pd.to_datetime(data['date'], errors='coerce')
 
     data['month'] = data['date'].dt.month  # Extract month from date
-    monthly_means = data.groupby('month')['lakelevel'].mean().reset_index()  # Mean lake level per month
+    monthly_means = data.groupby('month')[variable].mean().reset_index()  # Mean lake level per month
 
-    plt.plot(monthly_means['month'], monthly_means['lakelevel'], marker='o', color=get_variable_color('lakelevel'), label=lake_level_label)
+    plt.plot(monthly_means['month'], monthly_means[variable], marker='o', color=get_variable_color(variable), label=label)
 
     # Use month names for x-tick labels
     plt.xticks(monthly_means['month'], monthly_means['month'].apply(lambda x: calendar.month_name[x]), rotation=45)
 
     plt.xlabel('Month')
-    plt.ylabel(lake_level_label)
-    plt.title(f"Seasonal Correlation of {lake_level_label}")
+    plt.ylabel(label)
+    plt.title(f"Seasonal Correlation of {label}")
 
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
 
-    plt.savefig(path + 'seasonal_correlation.png', dpi=300)
+    plt.savefig(path + f'seasonal_correlation.png', dpi=300)
     plt.close()
