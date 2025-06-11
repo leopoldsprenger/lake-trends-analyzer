@@ -106,7 +106,10 @@ def main() -> None:
     x_data = x_data.dropna(subset=['date'])
 
     # --- Always use lakelevel from data/lakelevel_data.csv ---
-    y_data = load_y_variable_data(y_data_filepath, y_variable)
+    if y_variable == 'lakelevel':
+        y_data = load_y_variable_data('data/lakelevel_data.csv', 'lakelevel')
+    else:
+        y_data = load_y_variable_data(y_data_filepath, y_variable)
     x_data = pd.merge(x_data, y_data, on='date', how='left')
     # --------------------------------------------------------
 
@@ -135,7 +138,7 @@ def main() -> None:
 
     for variable in variables:
         if variable == 'lakelevel':
-            plot_data = load_y_variable_data('data/lakelevel_data.csv', 'lakelevel').copy()
+            plot_data = y_data.copy()
             plot_data = plot_data.dropna(subset=['date', 'lakelevel'])
         else:
             if use_years:

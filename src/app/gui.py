@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import (
     QFileDialog, QComboBox, QListWidget, QTextEdit, QSplitter, QSizePolicy
 )
 
-DEFAULT_CSV = "data/physical_data.csv"
+DEFAULT_CSV = "data/chemical_data.csv"
 TIMESERIES_DIR = "output/timeseries_graphs"
 CORRELATION_DIR = "output/correlation_graphs"
 OUTPUT_DIR = "output"
@@ -50,16 +50,18 @@ class ImageLabel(QLabel):
 class GenerateGraphsThread(QThread):
     finished_signal = pyqtSignal()
 
-    def __init__(self, csv_path):
+    def __init__(self, param_csv_path, y_variable_csv_path, y_variable):
         super().__init__()
-        self.csv_path = csv_path
+        self.param_csv_path = param_csv_path
+        self.y_variable_csv_path = y_variable_csv_path
+        self.y_variable = y_variable
 
     def run(self):
         try:
             subprocess.run(
                 [
                     sys.executable, "src/app/cli.py",
-                    self.csv_path
+                    self.param_csv_path, "--y_variable_source", self.y_variable_csv_path, "--y_variable", self.y_variable
                 ],
                 check=True
             )
@@ -72,11 +74,14 @@ class MainWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Lake Trends Analyzer")
         self.resize(1100, 700)
-        self.csv_path = DEFAULT_CSV
+        self.param_csv_path = DEFAULT_CSV
         self.param = None
+        self.y_variable_csv_path = DEFAULT_CSV
+        self.y_variable = None
 
         self.init_ui()
-        self.load_csv_headers()
+        self.load_param_csv_headers()
+        self.load_y_variable_csv_headers()
         self.load_output_files()
         self.update_plot()
 
@@ -89,41 +94,81 @@ class MainWindow(QWidget):
         sidebar_layout = QVBoxLayout(sidebar)
 
         # CSV File selection dropdown
-        self.csv_dropdown = QComboBox()
-        self.csv_dropdown.addItems([
+        self.param_csv_dropdown = QComboBox()
+        self.param_csv_dropdown.addItems([
             "Chemical Data (data/chemical_data.csv)",
             "Physical Data (data/physical_data.csv)",
             "Other (Choose file...)"
         ])
-        self.csv_dropdown.currentIndexChanged.connect(self.csv_dropdown_changed)
-        sidebar_layout.addWidget(QLabel("Source CSV:"))
-        sidebar_layout.addWidget(self.csv_dropdown)
+        self.param_csv_dropdown.currentIndexChanged.connect(self.param_csv_dropdown_changed)
 
-        self.csv_label = QLabel(f"{self.csv_path}")
-        self.csv_label.setWordWrap(True)
-        self.csv_label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        self.csv_label.setMaximumWidth(260)
-        sidebar_layout.addWidget(self.csv_label)
+        self.y_variable_csv_dropdown = QComboBox()
+        self.y_variable_csv_dropdown.addItems([
+            "Chemical Data (data/chemical_data.csv)",
+            "Physical Data (data/physical_data.csv)",
+            "Other (Choose file...)"
+        ])
+        self.y_variable_csv_dropdown.currentIndexChanged.connect(self.y_variable_csv_dropdown_changed)
+
+        self.param_csv_label = QLabel(self.param_csv_path)
+        self.param_csv_label.setWordWrap(True)
+        self.param_csv_label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        self.param_csv_label.setMaximumWidth(260)
+        self.param_csv_label.hide()
+
+        self.y_variable_csv_label = QLabel(self.y_variable_csv_path)
+        self.y_variable_csv_label.setWordWrap(True)
+        self.y_variable_csv_label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        self.y_variable_csv_label.setMaximumWidth(260)
 
         # Parameter dropdown
         self.param_dropdown = QComboBox()
         self.param_dropdown.currentIndexChanged.connect(self.param_changed)
 
+        # Y variable dropdown
+        self.y_variable_dropdown = QComboBox()
+        self.y_variable_dropdown.currentIndexChanged.connect(self.y_variable_changed)
+
         # Plot type dropdown
         self.plot_type_dropdown = QComboBox()
-        self.plot_type_dropdown.addItems(["Time Series", "Correlation"])
+        self.plot_type_dropdown.addItems(["Time Series", "Correlation", "Seasonal"])
         self.plot_type_dropdown.currentIndexChanged.connect(self.update_plot)
 
         # View Plots button
         self.view_plots_btn = QPushButton("View Plot")
         self.view_plots_btn.clicked.connect(self.update_plot)
 
-        sidebar_layout.addWidget(QLabel("Parameter:"))
+        sidebar_layout.addWidget(QLabel("Independent Source CSV:"))
+        sidebar_layout.addWidget(self.param_csv_dropdown)
+        sidebar_layout.addWidget(self.param_csv_label)
+        sidebar_layout.addSpacing(5)
+        sidebar_layout.addWidget(QLabel("Independent Variable:"))
         sidebar_layout.addWidget(self.param_dropdown)
+        sidebar_layout.addSpacing(10)
+        
         sidebar_layout.addWidget(QLabel("Plot Type:"))
         sidebar_layout.addWidget(self.plot_type_dropdown)
+        sidebar_layout.addSpacing(10)
+
+        self.y_variable_csv_text = QLabel("Affected Variable Source CSV:")
+        self.y_variable_text = QLabel("Affected Variable:")
+
+        sidebar_layout.addWidget(self.y_variable_csv_text)
+        sidebar_layout.addWidget(self.y_variable_csv_dropdown)
+        sidebar_layout.addWidget(self.y_variable_csv_label)
+        sidebar_layout.addSpacing(5)
+        sidebar_layout.addWidget(self.y_variable_text)
+        sidebar_layout.addWidget(self.y_variable_dropdown)
+
+        sidebar_layout.addSpacing(10)
         sidebar_layout.addWidget(self.view_plots_btn)
-        sidebar_layout.addSpacing(20)
+        sidebar_layout.addSpacing(25)
+
+        self.y_variable_csv_text.hide()
+        self.y_variable_csv_dropdown.hide()
+        self.y_variable_csv_label.hide()
+        self.y_variable_text.hide()
+        self.y_variable_dropdown.hide()
 
         sidebar_layout.addWidget(QLabel("Analysis Files:"))
         self.output_files_dropdown = QComboBox()
@@ -157,39 +202,71 @@ class MainWindow(QWidget):
         splitter.setSizes([300, 800])
         main_layout.addWidget(splitter)
 
-    def csv_dropdown_changed(self, idx):
+    def param_csv_dropdown_changed(self, idx):
         if idx == 0:
-            self.csv_path = "data/physical_data.csv"
-            self.csv_label.setText(self.csv_path)
-            self.load_csv_headers()
+            self.param_csv_path = "data/chemical_data.csv"
+            self.param_csv_label.hide()
+            self.load_param_csv_headers()
         elif idx == 1:
-            self.csv_path = "data/chemical_data.csv"
-            self.csv_label.setText(self.csv_path)
-            self.load_csv_headers()
+            self.param_csv_path = "data/physical_data.csv"
+            self.param_csv_label.hide()
+            self.load_param_csv_headers()
         elif idx == 2:
             path, _ = QFileDialog.getOpenFileName(self, "Select CSV", "", "CSV Files (*.csv)")
             if path:
-                self.csv_path = path
-                self.csv_label.setText(self.csv_path)
-                self.load_csv_headers()
+                self.param_csv_path = path
+                self.param_csv_label.setText(self.param_csv_path)
+                self.param_csv_label.show()
+                self.load_param_csv_headers()
             else:
                 # If user cancels, revert to previous selection
-                self.csv_dropdown.blockSignals(True)
+                self.param_csv_dropdown.blockSignals(True)
                 # Set to previous index (default to 0 if unknown)
-                prev_idx = 0 if self.csv_path == "data/physical_data.csv" else 1 if self.csv_path == "data/chemical_data.csv" else 2
-                self.csv_dropdown.setCurrentIndex(prev_idx)
-                self.csv_dropdown.blockSignals(False)
+                prev_idx = 0 if self.param_csv_path == "data/chemical_data.csv" else 1 if self.param_csv_path == "data/physical_data.csv" else 2
+                self.param_csv_dropdown.setCurrentIndex(prev_idx)
+                self.param_csv_dropdown.blockSignals(False)
+    
+    def y_variable_csv_dropdown_changed(self, idx):
+        if idx == 0:
+            self.y_variable_csv_path = "data/chemical_data.csv"
+            self.y_variable_csv_label.hide()
+            self.load_y_variable_csv_headers()
+        elif idx == 1:
+            self.y_variable_csv_path = "data/physical_data.csv"
+            self.y_variable_csv_label.hide()
+            self.load_y_variable_csv_headers()
+        elif idx == 2:
+            path, _ = QFileDialog.getOpenFileName(self, "Select CSV", "", "CSV Files (*.csv)")
+            if path:
+                self.y_variable_csv_path = path
+                self.y_variable_csv_label.setText(self.y_variable_csv_path)
+                self.y_variable_csv_label.show()
+                self.load_y_variable_csv_headers()
+            else:
+                # If user cancels, revert to previous selection
+                self.y_variable_csv_dropdown.blockSignals(True)
+                # Set to previous index (default to 0 if unknown)
+                prev_idx = 0 if self.y_variable_csv_path == "data/chemical_data.csv" else 1 if self.y_variable_csv_path == "data/physical_data.csv" else 2
+                self.y_variable_csv_dropdown.setCurrentIndex(prev_idx)
+                self.y_variable_csv_dropdown.blockSignals(False)
 
-    def select_csv(self):
+    def select_param_csv(self):
         path, _ = QFileDialog.getOpenFileName(self, "Select CSV", "", "CSV Files (*.csv)")
         if path:
-            self.csv_path = path
-            self.csv_label.setText(f"Source CSV:\n{self.csv_path}")
-            self.load_csv_headers()
+            self.param_csv_path = path
+            self.param_csv_label.setText(f"Parameter CSV:\n{self.param_csv_path}")
+            self.load_param_csv_headers()
 
-    def load_csv_headers(self):
+    def select_y_variable_csv(self):
+        path, _ = QFileDialog.getOpenFileName(self, "Select CSV", "", "CSV Files (*.csv)")
+        if path:
+            self.y_variable_csv_path = path
+            self.y_variable_csv_label.setText(f"Parameter CSV:\n{self.y_variable_csv_path}")
+            self.load_y_variable_csv_headers()
+
+    def load_param_csv_headers(self):
         try:
-            df = pd.read_csv(self.csv_path, nrows=1)
+            df = pd.read_csv(self.param_csv_path, nrows=1)
             headers = [h for h in df.columns if h.lower() != "date"]
             headers = [h.lower() for h in headers]
             # Ensure 'lakelevel' is first in the list
@@ -201,51 +278,69 @@ class MainWindow(QWidget):
             self.param_dropdown.addItems(headers)
             if headers:
                 self.param = headers[0]
-                self.update_plot_type_options()
         except Exception as e:
             self.param_dropdown.clear()
             self.param_dropdown.addItem("No parameters found")
             self.param = None
 
+    def load_y_variable_csv_headers(self):
+        try:
+            df = pd.read_csv(self.y_variable_csv_path, nrows=1)
+            headers = [h for h in df.columns if h.lower() != "date"]
+            headers = [h.lower() for h in headers]
+            # Ensure 'lakelevel' is first in the list
+            if "lakelevel" in headers:
+                headers.remove("lakelevel")
+            headers.sort()
+            headers.insert(0, "lakelevel")
+            self.y_variable_dropdown.clear()
+            self.y_variable_dropdown.addItems(headers)
+            if headers:
+                self.y_variable = headers[0]
+        except Exception as e:
+            self.y_variable_dropdown.clear()
+            self.y_variable_dropdown.addItem("No parameters found")
+            self.y_variable = None
+
     def param_changed(self, idx):
         self.param = self.param_dropdown.currentText()
-        self.update_plot_type_options()
         self.update_plot()
 
-    def update_plot_type_options(self):
-        # Save current selection
-        current = self.plot_type_dropdown.currentText()
-        self.plot_type_dropdown.blockSignals(True)
-        self.plot_type_dropdown.clear()
-        if self.param == "lakelevel":
-            self.plot_type_dropdown.addItems(["Time Series", "Seasonal"])
-        else:
-            self.plot_type_dropdown.addItems(["Time Series", "Correlation"])
-        # Restore selection if possible
-        idx = self.plot_type_dropdown.findText(current)
-        if idx != -1:
-            self.plot_type_dropdown.setCurrentIndex(idx)
-        self.plot_type_dropdown.blockSignals(False)
+    def y_variable_changed(self, idx):
+        self.y_variable = self.y_variable_dropdown.currentText()
+        self.update_plot()
 
     def update_plot(self):
-        variable = self.param
-        if not variable:
+        x_variable = self.param
+        y_variable = self.y_variable
+
+        if not x_variable:
             return
         plot_type = self.plot_type_dropdown.currentText()
         if plot_type == "Time Series":
-            img_path = os.path.join(TIMESERIES_DIR, f"{variable}_timeseries.png")
+            img_path = os.path.join(TIMESERIES_DIR, f"{x_variable}_timeseries.png")
         elif plot_type == "Correlation":
-            img_path = os.path.join(CORRELATION_DIR, f"{variable}_correlation.png")
-        elif plot_type == "Seasonal" and variable == "lakelevel":
-            img_path = os.path.join(CORRELATION_DIR, "seasonal_correlation.png")
+            img_path = os.path.join(CORRELATION_DIR, f"{y_variable}/{x_variable}_correlation.png")
+        elif plot_type == "Seasonal":
+            img_path = os.path.join(CORRELATION_DIR, f"{y_variable}/seasonal_correlation.png")
         else:
             return
+        
+        if plot_type == "Correlation":
+            self.y_variable_csv_text.show()
+            self.y_variable_csv_dropdown.show()
+            self.y_variable_text.show()
+            self.y_variable_dropdown.show()
+        else:
+            self.y_variable_csv_text.hide()
+            self.y_variable_csv_dropdown.hide()
+            self.y_variable_csv_label.hide()
+            self.y_variable_text.hide()
+            self.y_variable_dropdown.hide()
 
         self.text_view.hide()
         self.plot_img.show()
 
-        if not os.path.exists(img_path):
-            self.run_analysis_script(variable)
         self.plot_img.set_image(img_path)
 
     def view_file(self):
@@ -264,18 +359,6 @@ class MainWindow(QWidget):
             self.text_view.show()
             self.plot_img.hide()
 
-    def run_analysis_script(self, variable):
-        try:
-            subprocess.run(
-                [
-                    sys.executable, "src/app/cli.py",
-                    self.csv_path, "--variable", variable
-                ],
-                check=True
-            )
-        except Exception as e:
-            pass  # Optionally show error
-
     def load_output_files(self):
         files = [
             f for f in os.listdir(OUTPUT_DIR)
@@ -288,7 +371,7 @@ class MainWindow(QWidget):
     def generate_graphs(self):
         self.generate_graphs_btn.setEnabled(False)
         self.generate_graphs_btn.setText("Generating...")
-        self.thread = GenerateGraphsThread(self.csv_path)
+        self.thread = GenerateGraphsThread(self.param_csv_path, self.y_variable_csv_path, self.y_variable)
         self.thread.finished_signal.connect(self.on_generation_complete)
         self.thread.start()
 
