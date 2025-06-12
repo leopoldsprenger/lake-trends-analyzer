@@ -114,6 +114,13 @@ output/
 
 Datasets are provided in the `data/` folder.
 
+### 🎨 Changing Graph Colors
+
+To change the color of the graphs as well as the labels for different variables, update [assets/variable_graph_colors.txt](assets/variable_graph_colors.txt) and [assets/variable_labels.txt](assets/variable_labels.txt) accordingly:
+- Make sure to separate all variables from their labels and colors with `: `. 
+- Colors can either be specified as a word supported by _matplotlib_ or a hexadecimal value. 
+- All variables must be written in lower case from how they appear in the source csv file.
+
 ---
 
 ## 🧭 Roadmap
