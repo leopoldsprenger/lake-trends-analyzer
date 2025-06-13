@@ -89,10 +89,12 @@ def main() -> None:
 
     timeseries_folder_path = f'output/timeseries_graphs/'
     correlation_folder_path = f'output/correlation_graphs/{y_variable}/'
+    seasonal_folder_path = 'output/seasonal_graphs/'
 
     # Ensure the output directories for every variable exist
     os.makedirs(timeseries_folder_path, exist_ok=True)
     os.makedirs(correlation_folder_path, exist_ok=True)
+    os.makedirs(seasonal_folder_path, exist_ok=True)
 
     x_data = load_x_variable_data(x_data_filepath)
     x_data.columns = [col.lower() for col in x_data.columns]  # Standardize column names to lowercase
@@ -182,11 +184,16 @@ def main() -> None:
                 else:
                     print(f"Skipping correlation plot for '{variable}' due to insufficient data.")
 
-    # For seasonal correlation, use only lakelevel_df
-    if not y_data.empty:
-        generate_plots.plot_seasonal_correlation(y_data, y_variable, correlation_folder_path)
+    if not x_data.empty:
+        for variable in variables:
+            if variable == 'lakelevel':
+                seasonal_data = load_y_variable_data('data/lakelevel_data.csv', 'lakelevel')
+            else:
+                seasonal_data = x_data
+
+            generate_plots.plot_seasonal_correlation(seasonal_data, variable, seasonal_folder_path)
     else:
-        print(f"Skipping seasonal correlation plot for {y_variable} due to insufficient data.")
+        print(f"Skipping seasonal correlation plot for {variable} due to insufficient data.")
 
     print(f"Graphs saved to {timeseries_folder_path} and {correlation_folder_path}")
 

@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import (
 DEFAULT_CSV = "data/chemical_data.csv"
 TIMESERIES_DIR = "output/timeseries_graphs"
 CORRELATION_DIR = "output/correlation_graphs"
+SEASONAL_DIR = "output/seasonal_graphs"
 OUTPUT_DIR = "output"
 
 class ImageLabel(QLabel):
@@ -322,7 +323,7 @@ class MainWindow(QWidget):
         elif plot_type == "Correlation":
             img_path = os.path.join(CORRELATION_DIR, f"{y_variable}/{x_variable}_correlation.png")
         elif plot_type == "Seasonal":
-            img_path = os.path.join(CORRELATION_DIR, f"{y_variable}/seasonal_correlation.png")
+            img_path = os.path.join(SEASONAL_DIR, f"{x_variable}_seasonal_correlation.png")
         else:
             return
         

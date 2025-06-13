@@ -226,5 +226,5 @@ def plot_seasonal_correlation(
     plt.legend()
     plt.tight_layout()
 
-    plt.savefig(path + f'seasonal_correlation.png', dpi=300)
+    plt.savefig(path + f'{variable}_seasonal_correlation.png', dpi=300)
     plt.close()
