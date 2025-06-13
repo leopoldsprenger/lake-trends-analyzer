@@ -20,6 +20,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed arguments with input file and variables.
     """
+
     parser = argparse.ArgumentParser(description='Lake Trend Analyzer')
 
     parser.add_argument('parameter_source', type=str, help='Source CSV file for parameters')
@@ -40,38 +41,245 @@ def load_x_variable_data(filepath: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Loaded data as a pandas DataFrame.
     """
-    df = pd.read_csv(filepath, dtype=str)
-    df = df.map(lambda x: x.strip().replace(',', '') if isinstance(x, str) else x)
-    df = df.replace('', np.nan)
-    df.columns = [col.lower() for col in df.columns]  # Standardize column names to lowercase
+
+    dataframe = pd.read_csv(filepath, dtype=str)
+
+    dataframe = dataframe.map(lambda x: x.strip().replace(',', '') if isinstance(x, str) else x)
+    dataframe = dataframe.replace('', np.nan)
+    dataframe.columns = [col.lower() for col in dataframe.columns]  # Standardize column names to lowercase
+
     # Try to convert columns to numeric where possible (except 'date')
-    for col in df.columns:
+    for col in dataframe.columns:
         if col.lower() != 'date':
-            df[col] = pd.to_numeric(df[col], errors='coerce')
+            dataframe[col] = pd.to_numeric(dataframe[col], errors='coerce')
+
     # Convert 'date' to datetime and set as index for interpolation
-    df['date'] = pd.to_datetime(df['date'], errors='coerce')
-    df = df.set_index('date')
+    dataframe['date'] = pd.to_datetime(dataframe['date'], errors='coerce')
+    dataframe = dataframe.set_index('date')
+
     # Interpolate numeric columns
-    df = df.interpolate(method='time')
-    df = df.reset_index()
+    dataframe = dataframe.interpolate(method='time')
+    dataframe = dataframe.reset_index()
+
     # Filter out years 1970 and 2025
-    df = df[~df['date'].dt.year.isin([1970, 2025])]
-    return df
+    dataframe = dataframe[~dataframe['date'].dt.year.isin([1970, 2025])]
+
+    return dataframe
 
 def load_y_variable_data(filepath: str, y_variable: str) -> pd.DataFrame:
     """
     Load y variable data from the dedicated CSV.
+
+    Args:
+        filepath (str): Path to the CSV file.
+        y_variable (str): y variable decided by the user.
+
+    Returns:
+        pd.DataFrame: Loaded data as a pandas DataFrame.
     """
-    df = pd.read_csv(filepath, dtype=str)
-    df = df.map(lambda x: x.strip().replace(',', '') if isinstance(x, str) else x)
-    df = df.replace('', np.nan)
-    df.columns = [col.lower() for col in df.columns]
-    df = df.dropna(subset=['date', y_variable])
-    if not np.issubdtype(df['date'].dtype, np.datetime64):
-        df['date'] = pd.to_datetime(df['date'], errors='coerce')
-    df[y_variable] = pd.to_numeric(df[y_variable], errors='coerce')
-    df = df.dropna(subset=['date', y_variable])
-    return df[['date', y_variable]]
+
+    dataframe = pd.read_csv(filepath, dtype=str)
+
+    dataframe = dataframe.map(lambda x: x.strip().replace(',', '') if isinstance(x, str) else x)
+    dataframe = dataframe.replace('', np.nan)
+    dataframe.columns = [col.lower() for col in dataframe.columns]
+    dataframe = dataframe.dropna(subset=['date', y_variable])
+
+    if not np.issubdtype(dataframe['date'].dtype, np.datetime64):
+        dataframe['date'] = pd.to_datetime(dataframe['date'], errors='coerce')
+
+    dataframe[y_variable] = pd.to_numeric(dataframe[y_variable], errors='coerce')
+    dataframe = dataframe.dropna(subset=['date', y_variable])
+
+    return dataframe[['date', y_variable]]
+
+def load_and_process_x_data(filepath: str) -> pd.DataFrame:
+    """
+    Load and preprocess x variable data from the dedicated CSV before graphing.
+
+    Args:
+        filepath (str): Path to the CSV file.
+
+    Returns:
+        pd.DataFrame: Loaded and preprocessed x_data as a pandas DataFrame.
+    """
+
+    x_data = load_x_variable_data(filepath)
+    x_data.columns = [col.lower() for col in x_data.columns]  # Standardize column names to lowercase
+
+    # Remove rows with NaN in 'date'
+    x_data = x_data.dropna(subset=['date'])
+
+    # Convert 'date' to datetime if not already
+    if not np.issubdtype(x_data['date'].dtype, np.datetime64):
+        x_data['date'] = pd.to_datetime(x_data['date'], errors='coerce')
+    
+    x_data = x_data.dropna(subset=['date'])
+
+    return x_data
+
+def get_variables_from_data(arguments: argparse.Namespace, data: pd.DataFrame) -> list:
+    """
+    Get all variables from the dataset which have been specified through arguments.
+
+    Args:
+        arguments (argparse.Namespace): Command line arguments where the input variables are stored.
+        data (pd.DataFrame): Data from which to grab the variables from if none where specified.
+
+    Returns:
+        list: List of variable names in lower case.
+    """
+    if arguments.variables is None:
+        variables = [col for col in data.columns if col != 'date']
+        return variables
+
+    variables = arguments.variables
+    
+    for variable in variables:
+        if variable not in data.columns:
+            close_matches = difflib.get_close_matches(variable, data.columns, n=1)
+            suggestion = f" Did you mean '{close_matches[0]}'?" if close_matches else ""
+            raise ValueError(f"No variable '{variable}' found in data.{suggestion}")
+    
+    return variables
+
+def generate_timeseries_graph(data: pd.DataFrame, 
+                              variable: str, 
+                              folderpath: str, 
+                              use_months: bool = False, 
+                              use_years: bool = False) -> None:
+    """
+    Generate timeseries graph for given variable.
+
+    Args:
+        data (pd.DataFrame): Dataframe for the variable.
+        variable (str): Name of the variable header in lower case.
+        folderpath (str): Path to the folder where the correlation graphs will be saved to.
+        use_months (bool): Flag if the graph should use monthly averages.
+        use_years (bool): Flag if the graph should use yearly averages.
+    """
+
+    if variable == 'lakelevel':
+        plot_data = data.copy()
+        plot_data = plot_data.dropna(subset=['date', 'lakelevel'])
+    elif use_years:
+        plot_data = data.set_index('date').resample('YE')[variable].mean().reset_index()    
+    elif use_months:
+        plot_data = data.set_index('date').resample('ME')[variable].mean().reset_index()
+    else:  # use_days
+        plot_data = data[['date', variable]].copy()
+    
+    # Interpolate after resampling
+    plot_data[variable] = plot_data[variable].interpolate(method='linear')
+    plot_data = plot_data.dropna(subset=[variable])
+    
+    # Always drop rows with missing date (shouldn't happen, but for safety)
+    plot_data = plot_data.dropna(subset=['date'])
+
+    if plot_data.empty:
+        print(f"Skipping timeseries plot for '{variable}' due to insufficient data.")
+        return
+
+    generate_plots.plot_timeseries(plot_data, variable, folderpath, use_years=use_years)
+
+def generate_correlation_graph(x_data: pd.DataFrame, 
+                               y_data: pd.DataFrame, 
+                               x_variable: str, 
+                               y_variable: str, 
+                               folderpath: str, 
+                               use_monthly_averages: bool = False) -> None:
+    """
+    Generate correlation graph for an x variable and a y variable.
+
+    Args:
+        x_data (pd.DataFrame): Dataframe for the x variable.
+        y_data (pd.DataFrame): Dataframe for the y variable.
+        x_variable (str): Name of the x variable header in lower case.
+        y_variable (str): Name of the y variable header in lower case.
+        folderpath (str): Path to the folder where the correlation graphs will be saved to.
+        use_monthly_averages (bool): Flag if the graph should use monthly averages.
+    """
+
+    correlation_data = None
+
+    if use_monthly_averages:
+        x_monthly_data = x_data.set_index('date').resample('ME')[x_variable].mean().reset_index()
+        y_monthly_data = y_data.set_index('date').resample('ME')[y_variable].mean().reset_index()
+        
+        correlation_data = pd.merge(x_monthly_data, y_monthly_data, on='date', how='left')
+        correlation_data = correlation_data.dropna(subset=[x_variable, y_variable])
+    else:
+        correlation_data = pd.merge(x_data[['date', x_variable]], y_data, on='date', how='left')
+        correlation_data = correlation_data.dropna(subset=[x_variable, y_data])
+
+    if correlation_data.empty:
+        print(f"Skipping correlation plot for '{x_variable}' due to insufficient data.")
+        return
+
+    generate_plots.plot_correlation(correlation_data, x_variable, y_variable, folderpath)
+
+def generate_seasonal_graph(data: pd.DataFrame, variable: str, folderpath: str) -> None:
+    """
+    Generate seasonal graphs for a variable.
+
+    Args:
+        data: Dataframe to the CSV from which the variable is from.
+        variable: Name of the variable header in lower case.
+        folderpath: Path to the folder where the graph will be saved to.
+    """
+
+    if data.empty:
+        print(f"Skipping seasonal correlation plot for {variable} due to insufficient data.")
+        return
+
+    if variable == 'lakelevel':
+        seasonal_data = load_y_variable_data('data/lakelevel_data.csv', 'lakelevel')
+    else:
+        seasonal_data = data
+
+    generate_plots.plot_seasonal_correlation(seasonal_data, variable, folderpath)
+
+def generate_graphs(x_data: pd.DataFrame, 
+                    y_data: pd.DataFrame, 
+                    variables: list, 
+                    y_variable: str, 
+                    timeseries_folder_path: str, 
+                    correlation_folder_path: str, 
+                    seasonal_folder_path: str) -> None:
+    """
+    Generate all graphs for every independent x variable and an affected y variable.
+
+    Args:
+        x_data (pd.DataFrame): Dataframe for the x variable.
+        y_data (pd.DataFrame): Dataframe for the y variable.
+        variables (list): List of x variable header names in lower case.
+        y_variable (str): Name of the y variable header in lower case.
+        timeseries_folder_path (str): Path to the timeseries graphs output folder
+        correlation_folder_path (str): Path to the correlation graphs output folder
+        seasonal_folder_path (str): Path to the seasonal graphs output folder
+    """
+
+    # Determine time scale based on date range
+    date_min = x_data['date'].min()
+    date_max = x_data['date'].max()
+    date_range_years = (date_max - date_min).days / 365.25
+
+    use_years = date_range_years > 10
+    use_months = 2 < date_range_years <= 10
+
+    for variable in variables:
+        if variable == 'lakelevel':
+            plot_data = y_data.copy()
+        else:
+            plot_data = x_data
+
+        generate_timeseries_graph(plot_data, variable, timeseries_folder_path, use_months=use_months, use_years=use_years)
+
+        use_monthly_averages = (use_years or use_months) == True
+        if variable != y_variable:
+            generate_correlation_graph(x_data, y_data, variable, y_variable, correlation_folder_path, use_monthly_averages=use_monthly_averages)
+
+        generate_seasonal_graph(x_data, variable, seasonal_folder_path)
 
 def main() -> None:
     """
@@ -96,106 +304,25 @@ def main() -> None:
     os.makedirs(correlation_folder_path, exist_ok=True)
     os.makedirs(seasonal_folder_path, exist_ok=True)
 
-    x_data = load_x_variable_data(x_data_filepath)
-    x_data.columns = [col.lower() for col in x_data.columns]  # Standardize column names to lowercase
+    x_data = load_and_process_x_data(x_data_filepath)
 
-    # Remove rows with NaN in 'date'
-    x_data = x_data.dropna(subset=['date'])
-
-    # Convert 'date' to datetime if not already
-    if not np.issubdtype(x_data['date'].dtype, np.datetime64):
-        x_data['date'] = pd.to_datetime(x_data['date'], errors='coerce')
-    x_data = x_data.dropna(subset=['date'])
-
-    # --- Always use lakelevel from data/lakelevel_data.csv ---
+    # Always use lakelevel from data/lakelevel_data.csv
     if y_variable == 'lakelevel':
         y_data = load_y_variable_data('data/lakelevel_data.csv', 'lakelevel')
     else:
         y_data = load_y_variable_data(y_data_filepath, y_variable)
+    
     x_data = pd.merge(x_data, y_data, on='date', how='left')
-    # --------------------------------------------------------
 
-    if arguments.variables is not None:
-        variables = arguments.variables
-        for var in variables:
-            if var not in x_data.columns:
-                close_matches = difflib.get_close_matches(var, x_data.columns, n=1)
-                suggestion = f" Did you mean '{close_matches[0]}'?" if close_matches else ""
-                raise ValueError(f"No variable '{var}' found in data.{suggestion}")
-    else:
-        variables = [col for col in x_data.columns if col != 'date']
+    variables = get_variables_from_data(arguments, x_data)
 
     # Only forecast if lakelevel data is present
     if y_variable == 'lakelevel':
         analysis.forecast_future_lake_level(y_data, file_path='output/lake_level_forecast.txt')
 
-    # Determine time scale based on date range
-    date_min = x_data['date'].min()
-    date_max = x_data['date'].max()
-    date_range_years = (date_max - date_min).days / 365.25
-
-    use_years = date_range_years > 10
-    use_months = 2 < date_range_years <= 10
-    use_days = date_range_years <= 2
-
-    for variable in variables:
-        if variable == 'lakelevel':
-            plot_data = y_data.copy()
-            plot_data = plot_data.dropna(subset=['date', 'lakelevel'])
-        else:
-            if use_years:
-                plot_data = x_data.set_index('date').resample('YE')[variable].mean().reset_index()
-                # Interpolate after resampling
-                plot_data[variable] = plot_data[variable].interpolate(method='linear')
-                plot_data = plot_data.dropna(subset=[variable])
-            elif use_months:
-                plot_data = x_data.set_index('date').resample('ME')[variable].mean().reset_index()
-                plot_data[variable] = plot_data[variable].interpolate(method='linear')
-                plot_data = plot_data.dropna(subset=[variable])
-            else:  # use_days
-                plot_data = x_data[['date', variable]].copy()
-                plot_data[variable] = plot_data[variable].interpolate(method='linear')
-                plot_data = plot_data.dropna(subset=[variable])
-        # Always drop rows with missing date (shouldn't happen, but for safety)
-        plot_data = plot_data.dropna(subset=['date'])
-
-        if plot_data.empty:
-            print(f"Skipping plot for '{variable}' due to insufficient data.")
-            continue
-
-        generate_plots.plot_timeseries(plot_data, variable, timeseries_folder_path, use_years=use_years)
-
-        # Correlation plots (only if not y variable)
-        if variable != y_variable:
-            if use_months or use_years:
-                x_monthly_data = x_data.set_index('date').resample('ME')[variable].mean().reset_index()
-                y_monthly_data = y_data.set_index('date').resample('ME')[y_variable].mean().reset_index()
-                monthly_data = pd.merge(x_monthly_data, y_monthly_data, on='date', how='left')
-                monthly_data = monthly_data.dropna(subset=[variable, y_variable])
-                if not monthly_data.empty:
-                    generate_plots.plot_correlation(monthly_data, variable, y_variable, correlation_folder_path)
-                else:
-                    print(f"Skipping correlation plot for '{variable}' due to insufficient data.")
-            else:
-                corr_data = pd.merge(x_data[['date', variable]], y_data, on='date', how='left')
-                corr_data = corr_data.dropna(subset=[variable, y_data])
-                if not corr_data.empty:
-                    generate_plots.plot_correlation(corr_data, variable, correlation_folder_path)
-                else:
-                    print(f"Skipping correlation plot for '{variable}' due to insufficient data.")
-
-    if not x_data.empty:
-        for variable in variables:
-            if variable == 'lakelevel':
-                seasonal_data = load_y_variable_data('data/lakelevel_data.csv', 'lakelevel')
-            else:
-                seasonal_data = x_data
-
-            generate_plots.plot_seasonal_correlation(seasonal_data, variable, seasonal_folder_path)
-    else:
-        print(f"Skipping seasonal correlation plot for {variable} due to insufficient data.")
-
-    print(f"Graphs saved to {timeseries_folder_path} and {correlation_folder_path}")
+    generate_graphs(x_data, y_data, variables, y_variable, timeseries_folder_path, correlation_folder_path, seasonal_folder_path)
+    
+    print(f"Generation of all graphs completed!")
 
 if __name__ == '__main__':
     main()
