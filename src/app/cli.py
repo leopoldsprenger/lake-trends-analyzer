@@ -315,6 +315,15 @@ def main() -> None:
     x_data = pd.merge(x_data, y_data, on='date', how='left')
 
     variables = get_variables_from_data(arguments, x_data)
+    
+    # avoid double graphing when the y variable has the same dataset as the x variables
+    if f"{y_variable}_y" in variables:
+        x_data.drop(f'{y_variable}_y', axis=1, inplace=True)
+        x_data.rename(columns={f"{y_variable}_x": y_variable}, inplace=True)
+
+        variables.remove(f"{y_variable}_y")
+        duplicate_y_variable_index = variables.index(f"{y_variable}_x")
+        variables[duplicate_y_variable_index] = y_variable
 
     # Only forecast if lakelevel data is present
     if y_variable == 'lakelevel':
