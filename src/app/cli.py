@@ -12,6 +12,7 @@ sys.path.append(str(core_path))
 
 import generate_plots
 import analysis
+import generate_website_index
 
 def parse_arguments() -> argparse.Namespace:
     """
@@ -330,8 +331,10 @@ def main() -> None:
         analysis.forecast_future_lake_level(y_data, file_path='output/lake_level_forecast.txt')
 
     generate_graphs(x_data, y_data, variables, y_variable, timeseries_folder_path, correlation_folder_path, seasonal_folder_path)
-    
-    print(f"Generation of all graphs completed!")
+
+    print("All graphs generated successfully.")
+
+    generate_website_index.generate_json_index()
 
 if __name__ == '__main__':
     main()
