@@ -66,6 +66,10 @@ def calculate_trend(
         x_variable_values = data[x_variable]
     y_variable_values = data[y_variable]
 
+    # Add check for empty arrays
+    if len(x_variable_values) == 0 or len(y_variable_values) == 0:
+        raise ValueError(f"Cannot calculate trend: no data for {x_variable} vs {y_variable}")
+
     polynomial_coefficients = np.polyfit(x_variable_values, y_variable_values, 1)
     trend_line_function = np.poly1d(polynomial_coefficients)
 
@@ -164,6 +168,11 @@ def plot_correlation(
     alpha = 0.25 if len(data) > 1000 else 1.0  # Adjust alpha for large datasets
     data = data[data[x_variable] != 0]  # Remove zero values for better correlation
     variable_values = data[x_variable]
+
+    # Add check for empty data after filtering
+    if data.empty or data[y_variable].dropna().empty or variable_values.dropna().empty:
+        print(f"Skipping correlation plot for '{x_variable}' due to insufficient data after filtering.")
+        return
 
     plt.scatter(variable_values, data[y_variable], marker='.', color=color, label=y_variable_label, alpha=alpha)
 

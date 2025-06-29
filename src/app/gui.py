@@ -98,6 +98,7 @@ class MainWindow(QWidget):
         self.param_csv_dropdown = QComboBox()
         self.param_csv_dropdown.addItems([
             "Chemical Data (data/chemical_data.csv)",
+            "Biological Data (data/biological_data.csv)",
             "Physical Data (data/physical_data.csv)",
             "Other (Choose file...)"
         ])
@@ -106,6 +107,7 @@ class MainWindow(QWidget):
         self.y_variable_csv_dropdown = QComboBox()
         self.y_variable_csv_dropdown.addItems([
             "Chemical Data (data/chemical_data.csv)",
+            "Biological Data (data/biological_data.csv)",
             "Physical Data (data/physical_data.csv)",
             "Other (Choose file...)"
         ])
@@ -209,10 +211,14 @@ class MainWindow(QWidget):
             self.param_csv_label.hide()
             self.load_param_csv_headers()
         elif idx == 1:
-            self.param_csv_path = "data/physical_data.csv"
+            self.param_csv_path = "data/biological_data.csv"
             self.param_csv_label.hide()
             self.load_param_csv_headers()
         elif idx == 2:
+            self.param_csv_path = "data/physical_data.csv"
+            self.param_csv_label.hide()
+            self.load_param_csv_headers()
+        elif idx == 3:
             path, _ = QFileDialog.getOpenFileName(self, "Select CSV", "", "CSV Files (*.csv)")
             if path:
                 self.param_csv_path = path
@@ -223,7 +229,7 @@ class MainWindow(QWidget):
                 # If user cancels, revert to previous selection
                 self.param_csv_dropdown.blockSignals(True)
                 # Set to previous index (default to 0 if unknown)
-                prev_idx = 0 if self.param_csv_path == "data/chemical_data.csv" else 1 if self.param_csv_path == "data/physical_data.csv" else 2
+                prev_idx = 0 if self.param_csv_path == "data/chemical_data.csv" else 1 if self.param_csv_path == "data/biological_data" else 2 if self.param_csv_path == "data/physical_data.csv" else 3
                 self.param_csv_dropdown.setCurrentIndex(prev_idx)
                 self.param_csv_dropdown.blockSignals(False)
     
@@ -233,10 +239,14 @@ class MainWindow(QWidget):
             self.y_variable_csv_label.hide()
             self.load_y_variable_csv_headers()
         elif idx == 1:
-            self.y_variable_csv_path = "data/physical_data.csv"
+            self.y_variable_csv_path = "data/biological_data.csv"
             self.y_variable_csv_label.hide()
             self.load_y_variable_csv_headers()
         elif idx == 2:
+            self.y_variable_csv_path = "data/physical_data.csv"
+            self.y_variable_csv_label.hide()
+            self.load_y_variable_csv_headers()
+        elif idx == 3:
             path, _ = QFileDialog.getOpenFileName(self, "Select CSV", "", "CSV Files (*.csv)")
             if path:
                 self.y_variable_csv_path = path
@@ -247,7 +257,7 @@ class MainWindow(QWidget):
                 # If user cancels, revert to previous selection
                 self.y_variable_csv_dropdown.blockSignals(True)
                 # Set to previous index (default to 0 if unknown)
-                prev_idx = 0 if self.y_variable_csv_path == "data/chemical_data.csv" else 1 if self.y_variable_csv_path == "data/physical_data.csv" else 2
+                prev_idx = 0 if self.param_csv_path == "data/chemical_data.csv" else 1 if self.param_csv_path == "data/biological_data" else 2 if self.param_csv_path == "data/physical_data.csv" else 3
                 self.y_variable_csv_dropdown.setCurrentIndex(prev_idx)
                 self.y_variable_csv_dropdown.blockSignals(False)
 

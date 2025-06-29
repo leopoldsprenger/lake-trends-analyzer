@@ -211,10 +211,11 @@ def generate_correlation_graph(x_data: pd.DataFrame,
         correlation_data = correlation_data.dropna(subset=[x_variable, y_variable])
     else:
         correlation_data = pd.merge(x_data[['date', x_variable]], y_data, on='date', how='left')
-        correlation_data = correlation_data.dropna(subset=[x_variable, y_data])
+        correlation_data = correlation_data.dropna(subset=[x_variable, y_variable])
 
+    # Add warning if correlation_data is empty
     if correlation_data.empty:
-        print(f"Skipping correlation plot for '{x_variable}' due to insufficient data.")
+        print(f"Skipping correlation plot for '{x_variable}' due to insufficient data after merging.")
         return
 
     generate_plots.plot_correlation(correlation_data, x_variable, y_variable, folderpath)

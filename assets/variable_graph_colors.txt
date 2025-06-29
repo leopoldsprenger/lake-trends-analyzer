@@ -26,3 +26,120 @@ total phosphorus: red
 ortho-phosphate-p: purple
 ph: green
 secchi depth: green
+exiguous achnanthes: gray
+tiny achnanthes: gray
+eutrophic achnanthidium: gray
+very small achnanthidium: gray
+achnanthidium straubianum: gray
+sweet flag: green
+adlafia bryophila: gray
+amphora copulata: gray
+amphora indistincta: gray
+amphora ovalis: gray
+amphora pediculus: gray
+amphora subatomus: gray
+aneumastus minor: gray
+aneumastus stroesei: gray
+anomoeoneis sphaerophora: gray
+caloneis bacillum: gray
+cavinula scutelloides: gray
+hornwort: green
+opposite stonewort: green
+globular stonewort: green
+cocconeis neodiminuta: orange
+cocconeis neothumensis: orange
+cocconeis pediculus: orange
+cocconeis placentula var. euglypta: orange
+cocconeis placentula var. lineata: orange
+cocconeis placentula var. placentula: orange
+cocconeis pseudolineata: orange
+cymbella hustedtii var. hustedtii: gray
+canadian waterweed: green
+nuttall's waterweed: green
+encyonema prostratum: gray
+encyonopsis krammeri: gray
+encyonopsis minuta: gray
+encyonopsis subminuta: gray
+eolimna minima: gray
+epithemia adnata: orange
+epithemia sorex: orange
+epithemia turgida var. turgida: orange
+fallacia subhamulata: gray
+willow moss: green
+fragilaria brevistriata var. brevistriata: blue
+fragilaria capucina var. capucina: blue
+fragilaria construens f. construens: blue
+fragilaria construens f. venter: blue
+fragilaria martyi: blue
+fragilaria mesolepta: blue
+fragilaria perminuta: blue
+fragilaria pinnata var. pinnata: blue
+geissleria acceptata: gray
+geissleria cummerowi: gray
+gomphonema italicum: blue
+gomphonema minusculum: blue
+gomphonema olivaceoides: blue
+gomphonema olivaceum var. olivaceum: blue
+gomphonema parvulum var. parvulum f. parvulum: blue
+gomphonema pumilum var. pumilum: blue
+green algae: yellowgreen
+hippodonta costulata: gray
+karayevia clevei var. clevei: gray
+karayevia clevei var. rostrata: gray
+karayevia laterostrata: gray
+mayamaea atomus var. permitis: gray
+eurasian watermilfoil: green
+spiny naiad: green
+navicula antonii: blue
+navicula associata: blue
+navicula cari: blue
+navicula cryptofallax: blue
+navicula cryptotenella: blue
+navicula cryptotenelloides: blue
+navicula gregaria: blue
+navicula hofmanniae: blue
+navicula jakovljevicii: blue
+navicula lacuum: blue
+navicula radiosa var. radiosa: blue
+navicula reichardtiana var. reichardtiana: blue
+navicula slesvicensis: blue
+navicula subalpina: blue
+navicula tripunctata: blue
+navicula utermoehlii: blue
+navicula veneta: blue
+navicula wildii: blue
+neidium dubium: gray
+dark stonewort: green
+starry stonewort: green
+nitzschia abbreviata: blue
+nitzschia dissipata ssp. dissipata: blue
+nitzschia fonticola var. fonticola: blue
+nitzschia lacuum: blue
+nitzschia oligotraphenta: blue
+nitzschia palea var. debilis: blue
+nitzschia palea var. palea: blue
+pennales: gray
+common reed: green
+placoneis clementis: gray
+placoneis gastrum: gray
+placoneis pseudanglica var. pseudanglica: gray
+planothidium: gray
+planothidium delicatulum: gray
+planothidium frequentissimum: gray
+planothidium granum: gray
+planothidium joursacense: gray
+planothidium minutissimum: gray
+planothidium rostratum: gray
+platessa conspicua: gray
+shining pondweed: green
+fennel pondweed: green
+clasping-leaf pondweed: green
+lesser pondweed: green
+psammothidium bioretii: gray
+psammothidium lauenburgianum: gray
+fan-leaved water-crowfoot: green
+reimeria sinuata: gray
+rhoicosphenia abbreviata: gray
+rhopalodia gibba var. gibba: gray
+tabellaria flocculosa var. flocculosa: gray
+narrowleaf cattail: green
