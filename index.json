@@ -584,247 +584,247 @@
   "seasonal_correlations": [
     {
       "path": "output/seasonal_graphs/cocconeis placentula var. placentula_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/nitrate-n_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/cocconeis placentula var. euglypta_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/nitzschia fonticola var. fonticola_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/willow moss_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/ph_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/navicula antonii_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/globular stonewort_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/encyonema prostratum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/gomphonema italicum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/adlafia bryophila_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/planothidium granum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula cryptotenelloides_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/aneumastus stroesei_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/neidium dubium_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/fragilaria capucina var. capucina_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/cavinula scutelloides_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/encyonopsis subminuta_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/spiny naiad_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/geissleria acceptata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula reichardtiana var. reichardtiana_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/cymbella hustedtii var. hustedtii_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/fragilaria martyi_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/total-n_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/amphora indistincta_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/cocconeis neodiminuta_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula slesvicensis_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula hofmanniae_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/achnanthidium straubianum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/nuttall's waterweed_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula utermoehlii_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula jakovljevicii_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/clasping-leaf pondweed_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/fragilaria mesolepta_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/humidity_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "physical"
     },
     {
       "path": "output/seasonal_graphs/mayamaea atomus var. permitis_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/fragilaria construens f. venter_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/tabellaria flocculosa var. flocculosa_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula cryptotenella_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula cari_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/cocconeis neothumensis_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/potassium_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/conductivity_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/anomoeoneis sphaerophora_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/green algae_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/opposite stonewort_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/geissleria cummerowi_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/temperature_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "physical"
     },
     {
       "path": "output/seasonal_graphs/cocconeis placentula var. lineata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/oxygen saturation_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/oxygen content_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/psammothidium lauenburgianum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/doc_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/dark stonewort_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/redox potential_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/navicula gregaria_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/nitzschia oligotraphenta_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/aneumastus minor_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/fragilaria brevistriata var. brevistriata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/pennales_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula tripunctata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/lakelevel_seasonal_correlation.png",
@@ -832,335 +832,335 @@
     },
     {
       "path": "output/seasonal_graphs/epithemia adnata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/starry stonewort_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/gomphonema pumilum var. pumilum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/canadian waterweed_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/groundwater_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "physical"
     },
     {
       "path": "output/seasonal_graphs/encyonopsis krammeri_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/amphora pediculus_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/placoneis clementis_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/narrowleaf cattail_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula veneta_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/sweet flag_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/karayevia clevei var. rostrata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/very small achnanthidium_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula cryptofallax_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/ammonium-n dissolved_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/placoneis pseudanglica var. pseudanglica_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/chlorophyll a_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/lesser pondweed_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/rhoicosphenia abbreviata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/amphora copulata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/reimeria sinuata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/planothidium frequentissimum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/caloneis bacillum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/planothidium joursacense_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/ortho-phosphate-p_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/nitzschia abbreviata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/gomphonema minusculum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/silicon dioxide-si_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/total phosphorus_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/epithemia sorex_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/shining pondweed_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/magnesium_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/common reed_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/nitzschia palea var. debilis_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/acid capacity (alkalinity)_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/karayevia clevei var. clevei_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/cocconeis pseudolineata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/gomphonema olivaceum var. olivaceum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/hippodonta costulata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/precipitation_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "physical"
     },
     {
       "path": "output/seasonal_graphs/eolimna minima_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/placoneis gastrum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/planothidium_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/fan-leaved water-crowfoot_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/cocconeis pediculus_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/secchi depth_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/sodium_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/epithemia turgida var. turgida_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/tiny achnanthes_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/platessa conspicua_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/encyonopsis minuta_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/eutrophic achnanthidium_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/fragilaria construens f. construens_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/sulfate_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/fallacia subhamulata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/amphora subatomus_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/psammothidium bioretii_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula radiosa var. radiosa_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula lacuum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/rhopalodia gibba var. gibba_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/gomphonema olivaceoides_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/planothidium delicatulum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/hornwort_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/planothidium rostratum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula associata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/calcium_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/amphora ovalis_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/eurasian watermilfoil_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/chloride_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/fennel pondweed_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/exiguous achnanthes_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/planothidium minutissimum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/nitzschia dissipata ssp. dissipata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/nitzschia palea var. palea_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/gomphonema parvulum var. parvulum f. parvulum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/phaeophytin_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "chemical"
     },
     {
       "path": "output/seasonal_graphs/nitzschia lacuum_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/karayevia laterostrata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/windspeed_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "physical"
     },
     {
       "path": "output/seasonal_graphs/navicula wildii_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/fragilaria pinnata var. pinnata_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/fragilaria perminuta_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     },
     {
       "path": "output/seasonal_graphs/navicula subalpina_seasonal_correlation.png",
-      "csv_source": "unknown"
+      "csv_source": "biological"
     }
   ],
   "correlation_graphs": {

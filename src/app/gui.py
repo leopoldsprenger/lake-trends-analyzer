@@ -280,11 +280,9 @@ class MainWindow(QWidget):
             df = pd.read_csv(self.param_csv_path, nrows=1)
             headers = [h for h in df.columns if h.lower() != "date"]
             headers = [h.lower() for h in headers]
-            # Ensure 'lakelevel' is first in the list
-            if "lakelevel" in headers:
-                headers.remove("lakelevel")
+            if self.param_csv_path == "data/physical_data.csv":
+                headers.append("lakelevel") 
             headers.sort()
-            headers.insert(0, "lakelevel")
             self.param_dropdown.clear()
             self.param_dropdown.addItems(headers)
             if headers:
@@ -299,11 +297,9 @@ class MainWindow(QWidget):
             df = pd.read_csv(self.y_variable_csv_path, nrows=1)
             headers = [h for h in df.columns if h.lower() != "date"]
             headers = [h.lower() for h in headers]
-            # Ensure 'lakelevel' is first in the list
-            if "lakelevel" in headers:
-                headers.remove("lakelevel")
+            if self.param_csv_path == "data/physical_data.csv":
+                headers.append("lakelevel") 
             headers.sort()
-            headers.insert(0, "lakelevel")
             self.y_variable_dropdown.clear()
             self.y_variable_dropdown.addItems(headers)
             if headers:

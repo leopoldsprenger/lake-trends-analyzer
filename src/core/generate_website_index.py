@@ -32,10 +32,14 @@ def build_csv_source_map():
     return source_map
 
 def get_csv_source(filename):
-    var = os.path.basename(filename).replace('_timeseries.png', '').replace('_seasonal_correlation.png', '').replace('_correlation.png', '')
-    # Special handling for correlation graphs: get variable from filename
-    if '_correlation.png' in filename:
-        var = os.path.basename(filename).replace('_correlation.png', '')
+    # Remove extension and directory, get variable name
+    var = os.path.basename(filename)
+    if var.endswith('_timeseries.png'):
+        var = var.replace('_timeseries.png', '')
+    elif var.endswith('_seasonal_correlation.png'):
+        var = var.replace('_seasonal_correlation.png', '')
+    elif var.endswith('_correlation.png'):
+        var = var.replace('_correlation.png', '')
     # Always include lakelevel as physical
     if 'lakelevel' in filename:
         return 'physical'
