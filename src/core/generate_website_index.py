@@ -70,7 +70,7 @@ def generate_json_index():
         if os.path.isdir(y_path):
             index['correlation_graphs'][y_var] = list_pngs_with_source(y_path)
 
-    with open('index.json', 'w') as f:
+    with open('src/website/index.json', 'w') as f:
         json.dump(index, f, indent=2)
 
     print("JSON Index generated successfully.")

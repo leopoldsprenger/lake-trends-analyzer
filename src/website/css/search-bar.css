@@ -1,0 +1,23 @@
+#search-container {
+    position: static;
+    width: 260px;
+    padding: 0;
+    background: none;
+    border-top: none;
+    box-sizing: border-box;
+    z-index: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: auto;
+}
+#search-input {
+    width: 180px;
+    padding: 7px 12px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    margin-left: 10px;
+    margin-bottom: 0;
+}
