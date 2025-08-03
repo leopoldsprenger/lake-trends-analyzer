@@ -152,12 +152,35 @@
             border-color: #888;
             color: #222;
         }
+
+        #search-container {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            padding: 14px 20px 18px 20px;
+            background: #f8f8f8;
+            border-top: 1px solid #ddd;
+            box-sizing: border-box;
+            z-index: 101;
+        }
+        #search-input {
+            width: 100%;
+            padding: 7px 12px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+        }
     </style>
 </head>
 <body>
     <div id="sidebar">
         <h2>TOTCUS Graphs</h2>
         <ul id="nav"></ul>
+        <div id="search-container">
+            <input id="search-input" type="text" placeholder="Search graphs...">
+        </div>
     </div>
     <div id="main">
         <div id="title"></div>
@@ -179,6 +202,7 @@
     <script>
         let indexData = {};
         let currentFilter = 'all';
+        let currentSearch = '';
 
         async function loadIndex() {
             const response = await fetch('index.json');
@@ -191,7 +215,7 @@
 
         function getFirstGraph(arr) {
             if (!arr || !arr.length) return null;
-            return arr.find(item => filterMatch(item));
+            return arr.find(item => filterMatch(item) && searchMatch(item));
         }
 
         function buildNav() {
@@ -257,9 +281,8 @@
         }
 
         function addCategory(parent, files) {
-            // files is now an array of {path, csv_source}
             files
-                .filter(item => filterMatch(item))
+                .filter(item => filterMatch(item) && searchMatch(item))
                 .sort((a, b) => formatFilename(a.path).localeCompare(formatFilename(b.path)))
                 .forEach(item => {
                     const sub = document.createElement('li');
@@ -275,6 +298,12 @@
         function filterMatch(item) {
             if (currentFilter === 'all') return true;
             return (item.csv_source || '').toLowerCase() === currentFilter;
+        }
+
+        function searchMatch(item) {
+            if (!currentSearch) return true;
+            const label = formatFilename(item.path).toLowerCase();
+            return label.includes(currentSearch.toLowerCase());
         }
 
         function formatFilename(path) {
@@ -313,6 +342,12 @@
             });
             // Set 'All' as active by default
             document.querySelector('.filter-btn[data-type="all"]').classList.add('active');
+
+            // Search controls
+            document.getElementById('search-input').addEventListener('input', function() {
+                currentSearch = this.value;
+                buildNav();
+            });
         });
 
         loadIndex();
