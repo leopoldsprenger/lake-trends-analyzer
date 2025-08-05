@@ -9,32 +9,42 @@
     <link rel="stylesheet" href="src/website/css/search-bar.css">
 </head>
 <body>
-    <div id="sidebar">
-        <h2>TOTCUS Graphs</h2>
-        <ul id="nav"></ul>
-    </div>
-    <div id="main">
-        <div id="title"></div>
-        <div id="image-container">
-            <div id="loader">Loading...</div>
-            <img id="graph" src="" alt="" onload="hideLoader()">
+    <button id="hamburger">&#9776;</button>
+
+    <div id="container">
+        <div id="sidebar">
+            <div id="sidebar-content">
+                <h2>TOTCUS Graphs</h2>
+                <ul id="nav"></ul>
+            </div>
+
+            <div id="filter-controls">
+                <label>Filter by Data Type:</label>
+                <div>
+                    <button class="filter-btn" data-type="all">All</button>
+                    <button class="filter-btn" data-type="biological">Biological</button>
+                    <button class="filter-btn" data-type="chemical">Chemical</button>
+                    <button class="filter-btn" data-type="physical">Physical</button>
+                </div>
+                <div id="search-container">
+                    <input id="search-input" type="text" placeholder="Search graphs...">
+                </div>
+            </div>
+        </div>
+
+        <div id="main">
+            <div id="title"></div>
+            <div id="image-container">
+                <div id="loader">Loading...</div>
+                <img id="graph" src="" alt="" onload="hideLoader()">
+            </div>
         </div>
     </div>
-    <div id="filter-controls">
-        <label>Filter by Data Type:</label>
-        <div>
-            <button class="filter-btn" data-type="all">All</button>
-            <button class="filter-btn" data-type="biological">Biological</button>
-            <button class="filter-btn" data-type="chemical">Chemical</button>
-            <button class="filter-btn" data-type="physical">Physical</button>
-        </div>
-        <div id="search-container">
-            <input id="search-input" type="text" placeholder="Search graphs...">
-        </div>
-    </div>
+
     <script src="src/website/javascript/sidebar.js"></script>
     <script src="src/website/javascript/main.js"></script>
     <script src="src/website/javascript/filter-controls.js"></script>
     <script src="src/website/javascript/search-bar.js"></script>
+    <script src="src/website/javascript/mobile.js"></script>
 </body>
 </html>

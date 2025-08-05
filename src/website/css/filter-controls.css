@@ -2,7 +2,7 @@
     position: fixed;
     left: 260px;
     bottom: 0;
-    width: calc(100vw - 260px);
+    width: calc(100% - 260px);
     background: #f8f8f8;
     border-top: 1px solid #ddd;
     border-left: 1px solid #ddd;
@@ -10,7 +10,7 @@
     box-sizing: border-box;
     z-index: 100;
     display: flex;
-    align-items: center;
+    align-items: left;
     gap: 18px;
     justify-content: space-between;
 }
@@ -40,4 +40,10 @@
     background: #e0e0e0;
     border-color: #888;
     color: #222;
+}
+@media (max-width: 768px) {
+    #filter-controls {
+        left: 0px;
+        width: 100%;
+    }
 }
