@@ -5,9 +5,16 @@ import csv
 import os
 
 def get_weather_data_year(lat, lon, year):
+    today = datetime.today().date()
     url = "https://archive-api.open-meteo.com/v1/archive"
     start_date = f"{year}-01-01"
-    end_date = f"{year}-12-31"
+    if year > today.year:
+        print(f"Year {year} is in the future. Please use a year up to {today.year}.")
+        sys.exit(1)
+    elif year == today.year:
+        end_date = today.strftime("%Y-%m-%d")
+    else:
+        end_date = f"{year}-12-31"
     params = {
         "latitude": lat,
         "longitude": lon,
@@ -53,55 +60,91 @@ if __name__ == "__main__":
         except ValueError:
             print("Year must be an integer, e.g., 2017")
             sys.exit(1)
-        decade = get_decade(year_to_process)
-        output_dir = f"data/{decade}"
-        os.makedirs(output_dir, exist_ok=True)
-        output_csv = os.path.join(output_dir, f"data_from_{year_to_process}.csv")
+
+        # Output file: [nameofinputcsv]_new.csv
+        base, ext = os.path.splitext(input_csv)
+        output_csv = f"{base}_new{ext}"
 
         print("Fetching weather data for the whole year...")
         weather_data = get_weather_data_year(lat, lon, year_to_process)
 
-        with open(input_csv, newline='', encoding='utf-8') as infile, \
-             open(output_csv, 'w', newline='', encoding='utf-8') as outfile:
+        # Read input CSV
+        with open(input_csv, newline='', encoding='utf-8') as infile:
             reader = csv.DictReader(infile)
+            rows = list(reader)
             fieldnames = reader.fieldnames.copy()
-            insert_idx = fieldnames.index('LakeLevel') + 1
-            new_headers = ['Temperature', 'Windspeed', 'Humidity', 'Precipitation']
-            for h in reversed(new_headers):
-                fieldnames.insert(insert_idx, h)
-            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-            writer.writeheader()
-            for row in reader:
-                date_str = row['Date']
-                try:
-                    row_year = datetime.strptime(date_str, "%Y-%m-%d").year
-                except ValueError:
-                    row_year = None
-                if row_year != year_to_process:
-                    continue
-                try:
-                    datetime.strptime(date_str, "%Y-%m-%d")
-                except ValueError:
-                    for h in new_headers:
-                        row[h] = ''
-                    writer.writerow(row)
-                    continue
-                weather = weather_data.get(date_str, None)
-                mapping = {
-                    'Temperature': weather['temperature_2m'] if weather else None,
-                    'Windspeed': weather['windspeed_10m'] if weather else None,
-                    'Humidity': weather['relative_humidity_2m'] if weather else None,
-                    'Precipitation': weather['precipitation'] if weather else None
-                }
+
+        # Add new headers if not present
+        new_headers = ['Temperature', 'Windspeed', 'Humidity', 'Precipitation']
+        for h in new_headers:
+            if h not in fieldnames:
+                fieldnames.append(h)
+
+        # Read existing output if present
+        existing_rows = {}
+        if os.path.exists(output_csv):
+            with open(output_csv, newline='', encoding='utf-8') as outfile:
+                out_reader = csv.DictReader(outfile)
+                for row in out_reader:
+                    existing_rows[row['Date']] = row
+
+        # Merge and update rows
+        for row in rows:
+            date_str = row['Date']
+            try:
+                row_year = datetime.strptime(date_str, "%Y-%m-%d").year
+            except Exception:
+                row_year = None
+            if row_year != year_to_process:
+                continue
+            weather = weather_data.get(date_str, None)
+            mapping = {
+                'Temperature': weather['temperature_2m'] if weather else None,
+                'Windspeed': weather['windspeed_10m'] if weather else None,
+                'Humidity': weather['relative_humidity_2m'] if weather else None,
+                'Precipitation': weather['precipitation'] if weather else None
+            }
+            for h in new_headers:
+                val = mapping[h]
+                if val is None:
+                    row[h] = ''
+                elif val == 0.0:
+                    row[h] = 0
+                else:
+                    row[h] = round(val, 2)
+            existing_rows[date_str] = row  # update or add
+
+        # Add any new weather dates not in input
+        for date_str, weather in weather_data.items():
+            if date_str not in existing_rows:
+                new_row = {h: '' for h in fieldnames}
+                new_row['Date'] = date_str
                 for h in new_headers:
-                    val = mapping[h]
+                    val = None
+                    if h == 'Temperature':
+                        val = weather['temperature_2m']
+                    elif h == 'Windspeed':
+                        val = weather['windspeed_10m']
+                    elif h == 'Humidity':
+                        val = weather['relative_humidity_2m']
+                    elif h == 'Precipitation':
+                        val = weather['precipitation']
                     if val is None:
-                        row[h] = ''
+                        new_row[h] = ''
                     elif val == 0.0:
-                        row[h] = 0
+                        new_row[h] = 0
                     else:
-                        row[h] = round(val, 2)
+                        new_row[h] = round(val, 2)
+                existing_rows[date_str] = new_row
+
+        # Write all rows sorted by date
+        sorted_rows = sorted(existing_rows.values(), key=lambda r: r['Date'])
+        with open(output_csv, 'w', newline='', encoding='utf-8') as out:
+            writer = csv.DictWriter(out, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in sorted_rows:
                 writer.writerow(row)
+
         print(f"Done. Output written to {output_csv}")
     else:
         print("Usage:")

@@ -269,19 +269,29 @@ def generate_graphs(x_data: pd.DataFrame,
     use_years = date_range_years > 10
     use_months = 2 < date_range_years <= 10
 
+    # Generate time series and seasonal plots for all x variables (using full x_data)
     for variable in variables:
         if variable == 'lakelevel':
             plot_data = y_data.copy()
         else:
             plot_data = x_data
 
+        # Time series for x variable (using full x_data)
         generate_timeseries_graph(plot_data, variable, timeseries_folder_path, use_months=use_months, use_years=use_years)
+        # Seasonal for x variable (using full x_data)
+        generate_seasonal_graph(plot_data, variable, seasonal_folder_path)
 
-        use_monthly_averages = (use_years or use_months) == True
+    # Generate time series and seasonal plots for y variable (using full y_data)
+    if y_variable not in variables:
+        # Only generate if not already done above
+        generate_timeseries_graph(y_data, y_variable, timeseries_folder_path, use_months=use_months, use_years=use_years)
+        generate_seasonal_graph(y_data, y_variable, seasonal_folder_path)
+
+    # Generate correlation plots (using merged data)
+    for variable in variables:
         if variable != y_variable:
+            use_monthly_averages = (use_years or use_months) == True
             generate_correlation_graph(x_data, y_data, variable, y_variable, correlation_folder_path, use_monthly_averages=use_monthly_averages)
-
-        generate_seasonal_graph(x_data, variable, seasonal_folder_path)
 
 def main() -> None:
     """

@@ -1,6 +1,8 @@
 import csv
 import sys
 
+from detect_csv_encoding import detect_encoding
+
 # Constants for calculation
 NORMALSTAU = 65.49  # meters
 DHHN92_OFFSET = 1.35  # meters (135 cm)
@@ -18,7 +20,7 @@ def format_waterlevel(value):
     except ValueError:
         return value  # Return as is if not a number
 
-with open(input_file, newline='', encoding='utf-8') as csvfile_in, \
+with open(input_file, newline='', encoding=detect_encoding(input_file)) as csvfile_in, \
      open(output_file, 'w', newline='', encoding='utf-8') as csvfile_out:
     reader = csv.DictReader(csvfile_in)
     fieldnames = reader.fieldnames

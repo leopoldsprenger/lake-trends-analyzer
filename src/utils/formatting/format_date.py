@@ -2,8 +2,10 @@ import csv
 import sys
 from datetime import datetime
 
+from detect_csv_encoding import detect_encoding
+
 def reformat_dates(input_path, output_path):
-    with open(input_path, newline='', encoding='utf-8') as infile, \
+    with open(input_path, newline='', encoding=detect_encoding(input_path)) as infile, \
          open(output_path, 'w', newline='', encoding='utf-8') as outfile:
         reader = csv.DictReader(infile)
         fieldnames = reader.fieldnames
